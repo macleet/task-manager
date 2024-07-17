@@ -1,0 +1,64 @@
+#folder-add.MuiCollapse-root {
+    min-width: 100%;
+}
+
+.text-field-collapse .MuiCollapse-root {
+    width: 90%;
+}
+
+@media (min-width: 768px) {
+    .MuiCollapse-root {
+        width: 55%;
+    }
+}
+
+.react-calendar__navigation {
+    display: flex;  
+    width: 100%;
+    margin-bottom: 18px;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+button.react-calendar__navigation__arrow {
+    width: 10%;
+}
+
+div.react-calendar__month-view__weekdays__weekday,
+button.react-calendar__tile {
+    padding: 8px 0 8px 0;
+    transition: background-color 0.08s ease-in-out; 
+}
+
+button.react-calendar__tile:hover {
+    background-color: rgb(96 165 250);
+}
+
+.react-calendar__navigation__label {
+    width: fit-content;
+}
+
+.react-calendar__month-view__days {
+    opacity: 0.75;
+}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+    opacity: 0.5;
+}
+
+.react-calendar__month-view__days__day--neighboringMonth:hover {
+    opacity: 0.75;
+}
+
+button.react-calendar__month-view__days__day--weekend {
+    color: rgb(187, 12, 12);
+}
+
+.react-calendar__month-view__weekdays {
+    font-weight: 500;
+}
+
+button.react-calendar__tile--active {
+    background-color: rgb(29, 78, 216);
+    color: whitesmoke;
+}
