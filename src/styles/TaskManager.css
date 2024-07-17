@@ -1,0 +1,41 @@
+@media (min-width: 600px) {
+    div.tasks::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    div.folders::-webkit-scrollbar {
+        height: 8px;
+    }
+    
+    div.tasks::-webkit-scrollbar-track,
+    div.folders::-webkit-scrollbar-track {
+        border-radius: 8px;
+        background-color: #ffffff;
+        border: 1px solid #b2bbe9;
+        margin-left: 50px;
+        margin-right: 50px;
+    }
+    
+    div.folders::-webkit-scrollbar-track {
+        border: 1px solid #e9cfb2;
+    }
+    
+    div.tasks::-webkit-scrollbar-thumb,
+    div.folders::-webkit-scrollbar-thumb {
+        border-radius: 8px;
+        background-color: #497cc4;
+    }
+    
+    div.folders::-webkit-scrollbar-thumb {
+        background-color: #c59156;
+    }
+}
+
+@media (max-width: 600px) {
+    div.tasks::-webkit-scrollbar,
+    div.folders::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+
