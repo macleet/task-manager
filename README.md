@@ -27,7 +27,7 @@ This web application is a task manager with which we can create task items and o
   - The due date box will change color as the due date approaches.
 
 ## Tech Stack
-This web application uses a React frontend styled with Tailwind CSS. It utilizes a Node.js Express backend with a PostgreSQL database connection.
+This web application uses a React frontend styled with Tailwind CSS. It utilizes a Node.js Express backend with a PostgreSQL database connection. Used the Vite build tool for rapid and productive development.
 
 ## Installation and Setup
 ### Prerequisites
