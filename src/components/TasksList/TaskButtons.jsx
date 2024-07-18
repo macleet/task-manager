@@ -5,7 +5,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
-// import Calendar from 'react-calendar';
 
 const TaskButtons = ({taskId, setButtonClicked, showCal, setShowCal, readOnly, setReadOnly, taskName, editBtnColor, setEditBtnColor, taskStarred, setTaskStarred, setTaskItems}) => {
 	const editActive = 'text-orange-400';

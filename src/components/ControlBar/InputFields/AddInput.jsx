@@ -1,6 +1,8 @@
 import { TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
+import axios from 'axios';
+
 const AddInput = ({addInputHidden, setAddInputHidden, setFolderAdded, setCurrFolder}) => {
 	const handleFolderAdd = () => {
 		setAddInputHidden(!addInputHidden);

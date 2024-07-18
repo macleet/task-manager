@@ -1,6 +1,8 @@
 import { TextField } from '@mui/material';
 // import Search from '@mui/icons-material/Search';
 
+import axios from 'axios';
+
 const SearchInput = ({taskItems, setTaskItems, setCurrFolder}) => {
 	const handleSearch = event => {
 		if (!event.target.value) {
