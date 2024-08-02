@@ -7,7 +7,7 @@ taskRouter.post('/add', async (req, res) => {
     console.log("Add a task");
     try {
         const { description, date, priority, folder } = req.body;
-        const newTask = await pool.query('INSERT INTO tasks (description, due_date, priority, folder) VALUES ($1, $2, $3, $4) RETURNING *', [description, date, priority, folder]);
+        const newTask = await pool.query('INSERT INTO tasks (description, due_date, priority, folder_id) VALUES ($1, $2, $3, $4) RETURNING *', [description, date, priority, folder]);
         
         res.json(newTask.rows);
     } catch (err) {
@@ -32,13 +32,13 @@ taskRouter.delete('/delete/:id', async (req, res) => {
     console.log('Remove task');
     try {
         const { id } = req.params;
-        const folder = await pool.query('SELECT folder FROM tasks WHERE task_id = $1', [id]);   // Folder of task to be deleted
+        const folder = await pool.query('SELECT folder_id FROM tasks WHERE task_id = $1', [id]);   // Folder of task to be deleted
         await pool.query('DELETE FROM tasks WHERE task_id = $1 RETURNING *', [id]);     // Delete task from folder
 
         // Check if deleted task is last of folder
         const delFolder = folder.rows[0].folder;
         const folderEmpty = async () => {
-            const folders = await pool.query('SELECT * FROM tasks WHERE folder = $1', [delFolder]);
+            const folders = await pool.query('SELECT * FROM tasks WHERE folder_id = $1', [delFolder]);
             return folders ? false : true;
         }
         if (folderEmpty()) {
@@ -67,7 +67,7 @@ taskRouter.get('/search', async (req, res) => {
 // Get all tasks from folder
 taskRouter.get('/getAll/:folder', async (req, res) => {
     try {
-        const results = await pool.query('SELECT task_id, description, priority FROM tasks WHERE folder ILIKE $1 ORDER BY priority DESC, task_id', [req.params.folder]);
+        const results = await pool.query('SELECT task_id, description, priority FROM tasks WHERE folder_id ILIKE $1 ORDER BY priority DESC, task_id', [req.params.folder]);
         res.json(results.rows);
     } catch (err) {
         console.error(err.message);
@@ -87,8 +87,8 @@ taskRouter.get('/get/:id', async (req, res) => {
 // Toggle priority
 taskRouter.put('/priority/:id', async (req, res) => {
     try {
-        const folderId = await pool.query('UPDATE tasks SET priority = NOT priority WHERE task_id = $1 RETURNING folder', [req.params.id]);
-        // const result = await pool.query('SELECT * FROM tasks WHERE folder = $1 ORDER BY priority DESC, task_id', [folderId.rows[0].folder]);
+        const folderId = await pool.query('UPDATE tasks SET priority = NOT priority WHERE task_id = $1 RETURNING folder_id', [req.params.id]);
+        // const result = await pool.query('SELECT * FROM tasks WHERE folder_id = $1 ORDER BY priority DESC, task_id', [folderId.rows[0].folder]);
         res.json();
     } catch (err) {
         console.error(err.message);

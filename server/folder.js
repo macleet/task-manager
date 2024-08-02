@@ -39,7 +39,7 @@ folderRouter.put('/change/:id', async (req, res) => {
         const oldName = await pool.query('SELECT name FROM folders WHERE folder_id = $1', [req.params.id]);
         console.log(oldName.rows[0].name);
         await pool.query('UPDATE folders SET name = $1 WHERE folder_id = $2', [name, req.params.id]);
-        await pool.query('UPDATE tasks SET folder = $1 WHERE folder = $2', [name, oldName.rows[0].name]);
+        await pool.query('UPDATE tasks SET folder = $1 WHERE folder_id = $2', [name, oldName.rows[0].name]);
         res.json();
     } catch (err) {
         console.error(err.message);
@@ -50,9 +50,8 @@ folderRouter.put('/change/:id', async (req, res) => {
 folderRouter.delete('/delete/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const folderName = await pool.query('DELETE FROM folders WHERE folder_id = $1 RETURNING name', [id]);
-        console.log(folderName.rows[0].name);
-        await pool.query('DELETE FROM tasks WHERE folder = $1', [folderName.rows[0].name]);
+        await pool.query('DELETE FROM folders WHERE folder_id = $1', [id]);
+        await pool.query('DELETE FROM tasks WHERE folder_id = $1', [id]);
         res.json();
     } catch (err) {
         console.error(err.message);
