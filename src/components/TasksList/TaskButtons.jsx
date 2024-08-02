@@ -31,27 +31,27 @@ const TaskButtons = ({taskId, setButtonClicked, showCal, setShowCal, readOnly, s
 			return;
 		}
 
-		const updateTaskName = async newName => {
+		const updateTaskName = async (newName) => {
 			try {
 				await axios.put(`http://localhost:8000/task/update/${taskId}`, {
-					"new_description": newName
+					"new_description": newName,
 				});
 			} catch (err) {
 				console.error(err.message);
 			}
 		};
 
-		if (readOnly) {		// turning edit mode on
+		// Handle turning edit mode on
+		if (readOnly) {		
 			setEditBtnColor(editActive);
 			taskName.current.focus();
 		} else {
 			updateTaskName(taskName.current.value);
 			setEditBtnColor(editInactive);
 		}
-
 		setReadOnly(!readOnly);
 	};
-	// console.log(setTaskItems);
+
 	const handleStar = () => {
 		// console.log(setTaskItems);
 		const changePriority = async () => {
@@ -72,11 +72,9 @@ const TaskButtons = ({taskId, setButtonClicked, showCal, setShowCal, readOnly, s
 
 	return (
 		<div className="text-gray-200 h-full w-2/6 flex justify-evenly items-center">
-			<div className='flex flex-col'>
-				<button onClick={handleCal} className="hover:text-slate-700 transition-colors">
-					<EditCalendarIcon fontSize='large' />
-				</button>
-			</div>
+			<button onClick={handleCal} className="flex flex-col hover:text-slate-700 transition-colors">
+				<EditCalendarIcon fontSize='large' />
+			</button>
 			<button onClick={handleEdit} className={editBtnColor}>
 				<EditIcon id="hello" fontSize='large' />
     	    </button>
