@@ -87,17 +87,15 @@ const TaskItem = ({taskId, newTask, description, priority, setButtonClicked, set
 					  	</div> :
 						null
 	return (
-		<div className='flex flex-col items-center my-4'>
-			<li ref={tasksEndRef} className="text-gray-200 font-bold rounded bg-sky-600 w-full h-14 md:h-16 mb-4 flex justify-between items-center pl-2 shadow-md" >
-				<input onKeyDown={handleEditEnter} ref={taskName} readOnly={readOnly} defaultValue={description} className="text-xl w-3/6 h-3/4 p-2 bg-inherit rounded-md outline-none" />
+		<div className='flex flex-col justify-start items-center gap-5'>
+			<li ref={tasksEndRef} className="text-gray-200 font-bold rounded bg-sky-600 w-full h-14 md:h-16 flex justify-between items-center shadow-md p-2 px-3" >
+				<input onKeyDown={handleEditEnter} ref={taskName} readOnly={readOnly} defaultValue={description} className="text-xl w-3/6 h-3/4 bg-inherit rounded-md outline-none" />
 				{dueDateEl}
 				<TaskButtons taskId={taskId} setButtonClicked={setButtonClicked} showCal={showCal} setShowCal={setShowCal} readOnly={readOnly} setReadOnly={setReadOnly} taskName={taskName} editBtnColor={editBtnColor} setEditBtnColor={setEditBtnColor} taskStarred={taskStarred} setTaskStarred={setTaskStarred} setTaskItems={setTaskItems} />
 			</li>
 			
-			<Collapse in={showCal} timeout="auto" mountOnEnter unmountOnExit >
-				<div className='flex justify-center bg-blue-200 max-w-1/2 rounded p-4 mb-4'>
-					<Calendar onClickDay={handleDayClick} value={dueDate} calendarType='gregory' className="flex flex-col items-center text-center" />
-				</div>
+			<Collapse in={showCal} timeout="auto" mountOnEnter unmountOnExit className='flex justify-center bg-blue-200 max-w-1/2 rounded p-4' >
+				<Calendar onClickDay={handleDayClick} value={dueDate} calendarType='gregory' className="flex flex-col text-center w-full p-2" />
 			</Collapse>
 		</div>
 	);

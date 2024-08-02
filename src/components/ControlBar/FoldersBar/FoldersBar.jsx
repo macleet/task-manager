@@ -8,7 +8,7 @@ const FoldersBar = ({hidden, currFolder, setCurrFolder, setCurrHeader, folderAdd
 	const [currId, setCurrId] = useState();
 	const [folderDeleted, setFolderDeleted] = useState(false);
 
-	const initStyle = "text-orange-900 h-fit min-w-min w-36 bg-orange-400 hover:bg-amber-500 mx-2 my-4 p-4 flex flex-col justify-between items-center rounded-full shadow-md transition-colors cursor-pointer";
+	const initStyle = "text-orange-900 h-fit min-w-min w-36 bg-orange-400 hover:bg-amber-500 p-4 flex flex-col justify-between items-center rounded-full shadow-md transition-colors cursor-pointer";
 	// const highlightStyle = "text-orange-900 h-fit min-w-min w-36 bg-orange-400 hover:bg-amber-500 mx-2 my-4 p-4 flex flex-col justify-between items-center rounded-full shadow-md transition-colors cursor-pointer border-4 border-solid border-amber-600";
 
     useEffect(() => {
@@ -32,8 +32,8 @@ const FoldersBar = ({hidden, currFolder, setCurrFolder, setCurrHeader, folderAdd
 	// }, [currId]);
 
 	return (
-		<div className='overflow-y-auto w-full'>
-			<div className="overflow-y-auto flex items-center w-full h-fit bg-orange-200 mb-6 rounded-full px-4 shadow-md folders">
+		<div className='overflow-y-auto w-full py-2'>
+			<div className="overflow-y-auto flex items-center w-full h-fit bg-orange-200 rounded-full p-3 shadow-md folders">
 				{folderItems}
 			</div>
 		</div>

@@ -19,9 +19,7 @@ const ControlBar = ({taskItems, setTaskItems, currFolder, setCurrFolder}) => {
 	useEffect(() => {
 		const getFolderName = async () => {
 			try {
-				// console.log('****');
 				const response = await axios.get(`http://localhost:8000/folder/${currFolder}`);
-				// console.log(response.data.name);
 				setCurrHeader(response.data.name);
 			} catch (err) {
 				console.log(err.message);
@@ -37,9 +35,9 @@ const ControlBar = ({taskItems, setTaskItems, currFolder, setCurrFolder}) => {
 
 	return (
 	    <div className="flex flex-col h-fit w-full">
-			<div className="flex justify-between items-center w-full mb-4" >
-				<div className="flex justify-between items-center w-full" >
-					<div className='flex items-center '>
+			<div className="flex justify-between items-center w-full" >
+				<div className="flex justify-between items-center w-full px-1" >
+					<div className='flex items-center'>
 						<FolderIcon onClick={handleFolderClick} fontSize="large" className="text-yellow-500 hover:scale-110 cursor-pointer" />
 						<h2 className="text-2xl whitespace-nowrap mx-6 font-semibold text-gray-800 leading-none" >
 							{currHeader} 

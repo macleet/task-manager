@@ -14,13 +14,11 @@ function App() {
     const [taskItems, setTaskItems] = useState([]);
 
   	return (
-		<div className="h-screen w-screen px-8 sm:px-12 md:px-20 lg:px-20 py-12 bg-blue-100 flex flex-col justify-between">
+		<div className="h-screen w-screen bg-blue-100 flex flex-col gap-3 justify-between p-6">
 			<Header />
-			<main className="h-5/6 w-full flex flex-col justify-evenly">
-				<ControlBar taskItems={taskItems} setTaskItems={setTaskItems} currFolder={currFolder} setCurrFolder={setCurrFolder} />
-				<TasksList taskItems={taskItems} setTaskItems={setTaskItems} currFolder={currFolder} newTask={newTask} />
-                <TaskAddField currFolder={currFolder} setNewTask={setNewTask} />
-			</main>
+			<ControlBar taskItems={taskItems} setTaskItems={setTaskItems} currFolder={currFolder} setCurrFolder={setCurrFolder} />
+			<TasksList taskItems={taskItems} setTaskItems={setTaskItems} currFolder={currFolder} newTask={newTask} />
+			<TaskAddField currFolder={currFolder} setNewTask={setNewTask} />
     	</div>
   	);
 }

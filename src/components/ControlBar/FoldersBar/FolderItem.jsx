@@ -9,7 +9,7 @@ const FolderItem = ({currFolder, setCurrFolder, setCurrHeader, folderId, name, s
 
 	return (
 		folderId === 1 ? 
-		<div onClick={handleClick} id={1} className="text-orange-900 w-24 h-max bg-orange-400 hover:bg-amber-500 mx-2 my-4 p-4 flex flex-col justify-between items-center rounded-full shadow-md transition-colors cursor-pointer">
+		<div onClick={handleClick} id={1} className="text-orange-900 w-24 h-max bg-orange-400 hover:bg-amber-500 mx-2 p-3 flex flex-col justify-between items-center rounded-full shadow-md transition-colors cursor-pointer">
 			<input id={1} className="text-lg text-center font-bold h-full max-w-full bg-inherit rounded-full outline-none cursor-pointer" defaultValue={name} readOnly />
 			<div className="mt-2 opacity-50" >
 				<i className="fa-solid fa-lock" />
