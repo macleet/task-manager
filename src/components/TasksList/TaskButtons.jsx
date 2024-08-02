@@ -53,21 +53,18 @@ const TaskButtons = ({taskId, setButtonClicked, showCal, setShowCal, readOnly, s
 	};
 
 	const handleStar = () => {
-		// console.log(setTaskItems);
 		const changePriority = async () => {
 			try {
 				await axios.put(`http://localhost:8000/task/priority/${taskId}`);
-				// console.log(response.data);
 				// const taskItems = response.data.map(task => <TaskItem key={task.task_id} taskId={task.task_id} description={task.description} />);
-				// console.log(setTaskItems);
 				// setTaskItems(taskItems);
 			} catch (err) {
 				console.error(err.message);
 			}
 		};
-		changePriority();
-		setButtonClicked(true);
-		setTaskStarred(!taskStarred);
+		// changePriority();
+		// setButtonClicked(true);
+		// setTaskStarred(!taskStarred);
 	};
 
 	return (
