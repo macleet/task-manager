@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const FolderButtons = ({folderId, setCurrFolder, setFolderDeleted}) => {
 	const handleDelete = () => {
 		const deleteTask = async () => {
