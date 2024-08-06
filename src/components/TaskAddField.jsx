@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { TextField } from '@mui/material';
 
-const TaskAddField = ({currFolder, setNewTask}) => {
+const TaskAddField = ({currFolderId, setNewTask}) => {
     const handleEnter = event => {
         if (event.key !== 'Enter' || event.target.value === '') {
             return;
@@ -14,7 +14,7 @@ const TaskAddField = ({currFolder, setNewTask}) => {
                     "description": name,
                     "date": null,
                     "priority": false,
-                    "folder": currFolder
+                    "folder_id": currFolderId
                 });
                 setNewTask(response.data[0]);
             } catch (err) {
