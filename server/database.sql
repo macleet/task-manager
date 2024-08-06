@@ -5,7 +5,7 @@ CREATE TABLE tasks(
     description VARCHAR(255),
     due_date DATE,
     priority BOOLEAN,
-    folder VARCHAR(255)
+    folder_id VARCHAR(255)
 );
 
 CREATE TABLE folders(
