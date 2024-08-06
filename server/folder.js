@@ -25,7 +25,7 @@ folderRouter.get('/:id', async (req, res) => {
 // Add folder
 folderRouter.post('/add/:name', async (req, res) => {
     try {
-        const fid = await pool.query('INSERT INTO folders (name) VALUES ($1)  RETURNING folder_id', [req.params.name]);
+        const fid = await pool.query('INSERT INTO folders (name) VALUES ($1) RETURNING folder_id', [req.params.name]);
         res.json({ id: fid });
     } catch (err) {
         console.error("add folder error: ", err.message)
@@ -33,13 +33,11 @@ folderRouter.post('/add/:name', async (req, res) => {
 });
 
 // Change folder name
-folderRouter.put('/change/:id', async (req, res) => {
+folderRouter.patch('/change/:id', async (req, res) => {
     try {
-        const name = req.body["name"];
-        const oldName = await pool.query('SELECT name FROM folders WHERE folder_id = $1', [req.params.id]);
-        console.log(oldName.rows[0].name);
-        await pool.query('UPDATE folders SET name = $1 WHERE folder_id = $2', [name, req.params.id]);
-        await pool.query('UPDATE tasks SET folder = $1 WHERE folder_id = $2', [name, oldName.rows[0].name]);
+        const newName = req.body["name"];
+        await pool.query('SELECT name FROM folders WHERE folder_id = $1', [req.params.id]);
+        await pool.query('UPDATE folders SET name = $1 WHERE folder_id = $2', [newName, req.params.id]);
         res.json();
     } catch (err) {
         console.error(err.message);
@@ -50,9 +48,9 @@ folderRouter.put('/change/:id', async (req, res) => {
 folderRouter.delete('/delete/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        await pool.query('DELETE FROM folders WHERE folder_id = $1', [id]);
+        const response = await pool.query('DELETE FROM folders WHERE folder_id = $1 RETURNING *', [id]);
         await pool.query('DELETE FROM tasks WHERE folder_id = $1', [id]);
-        res.json();
+        res.json(response.rows);
     } catch (err) {
         console.error(err.message);
     }
