@@ -1,27 +1,19 @@
-#folder-add.MuiCollapse-root {
-    min-width: 100%;
-}
-
-.text-field-collapse .MuiCollapse-root {
-    width: 90%;
-}
-
-@media (min-width: 768px) {
-    .MuiCollapse-root {
-        width: 55%;
-    }
+.react-calendar {
+    width: 100%;
 }
 
 .react-calendar__navigation {
-    display: flex;  
-    width: 100%;
-    margin-bottom: 18px;
-    font-weight: 600;
-    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
 }
 
-button.react-calendar__navigation__arrow {
-    width: 10%;
+.react-calendar__navigation__arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    font-size: 13px;
 }
 
 div.react-calendar__month-view__weekdays__weekday,
@@ -34,20 +26,25 @@ button.react-calendar__tile:hover {
     background-color: rgb(96 165 250);
 }
 
-.react-calendar__navigation__label {
-    width: fit-content;
+button.react-calendar__navigation__label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+}
+
+.react-calendar__navigation__label__labelText {
+    display: flex;  
+    justify-content: center;
+    align-items: center;
 }
 
 .react-calendar__month-view__days {
-    opacity: 0.75;
+    font-size: 13px;
 }
 
 .react-calendar__month-view__days__day--neighboringMonth {
     opacity: 0.5;
-}
-
-.react-calendar__month-view__days__day--neighboringMonth:hover {
-    opacity: 0.75;
 }
 
 button.react-calendar__month-view__days__day--weekend {
@@ -55,10 +52,10 @@ button.react-calendar__month-view__days__day--weekend {
 }
 
 .react-calendar__month-view__weekdays {
-    font-weight: 500;
+    font-size: 12px;
 }
 
 button.react-calendar__tile--active {
-    background-color: rgb(29, 78, 216);
+    background-color: #3b82f6;
     color: whitesmoke;
 }
