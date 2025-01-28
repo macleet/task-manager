@@ -1,25 +1,22 @@
-import pool from './db.js';
-import { Router } from 'express';
+import pool from "./db.js";
+import { Router } from "express";
 const taskRouter = Router();
 
 // Create a task
-taskRouter.post('/add', async (req, res) => {
-    console.log("Add a task");
+taskRouter.post("/add", async (req, res) => {
     try {
-        const { description, date, priority, folder } = req.body;
-        const newTask = await pool.query('INSERT INTO tasks (description, due_date, priority, folder_id) VALUES ($1, $2, $3, $4) RETURNING *', [description, date, priority, folder]);
-        
-        res.json(newTask.rows);
+        const { name, folderId } = req.body;
+        await pool.query("INSERT INTO tasks (name, folder_id) VALUES ($1, $2)", [name, folderId]);
+        res.json();
     } catch (err) {
-        console.error(err.message);
+        console.error("Error creating new task", err.message);
     }
 });
 
 // Delete all tasks
-taskRouter.delete('/delete/all', async (req, res) => {
-    console.log('Remove all tasks');
+taskRouter.delete("/delete/all", async (req, res) => {
     try {
-        await pool.query('TRUNCATE tasks');
+        await pool.query("TRUNCATE tasks");
         await pool.query("DELETE FROM folders WHERE NOT name = 'Main'");
         res.json();
     } catch (err) {
@@ -28,19 +25,19 @@ taskRouter.delete('/delete/all', async (req, res) => {
 });
 
 // Delete a task
-taskRouter.delete('/delete/:id', async (req, res) => {
-    console.log('Remove task');
+taskRouter.delete("/delete/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const folder = await pool.query('SELECT folder_id FROM tasks WHERE task_id = $1', [id]);   // Folder of task to be deleted
-        await pool.query('DELETE FROM tasks WHERE task_id = $1 RETURNING *', [id]);     // Delete task from folder
+        const folder = await pool.query("SELECT folder_id FROM tasks WHERE task_id = $1", [id]);    // Folder of task to be deleted
+        await pool.query("DELETE FROM tasks WHERE task_id = $1 RETURNING *", [id]);    // Delete task from folder
 
         // Check if deleted task is last of folder
         const delFolder = folder.rows[0].folder;
+
         const folderEmpty = async () => {
-            const folders = await pool.query('SELECT * FROM tasks WHERE folder_id = $1', [delFolder]);
-            return folders ? false : true;
-        }
+            const folders = await pool.query("SELECT * FROM tasks WHERE folder_id = $1", [delFolder]);
+            return folders ? false : true; // Check if folder is empty
+        };
         if (folderEmpty()) {
             await pool.query("DELETE FROM folders WHERE name = $1 AND NOT name = 'Main'", [delFolder]);     // Delete empty folder
         }
@@ -49,15 +46,13 @@ taskRouter.delete('/delete/:id', async (req, res) => {
     } catch (err) {
         console.error(err.message);
     }
-})
+});
 
 // Search
-taskRouter.get('/search', async (req, res) => {
-    console.log('Search for task');
+taskRouter.get("/search", async (req, res) => {
     try {
-        const {search_query} = req.query;
-        console.log(search_query);
-        const results = await pool.query('SELECT * FROM tasks WHERE description ILIKE $1', [`%${search_query}%`]);
+        const search_query = req.query.search_query.toLowerCase();
+        const results = await pool.query("SELECT * FROM tasks WHERE name ILIKE $1 OR name ILIKE $2", [`${search_query}%`, `%${search_query}%`]);
         res.json(results.rows);
     } catch (err) {
         console.error(err.message);
@@ -65,60 +60,61 @@ taskRouter.get('/search', async (req, res) => {
 });
 
 // Get all tasks from folder
-taskRouter.get('/getAll/:folder', async (req, res) => {
+taskRouter.get("/getAll/:folderId", async (req, res) => {
     try {
-        const results = await pool.query('SELECT * FROM tasks WHERE folder_id ILIKE $1 ORDER BY priority DESC, task_id', [req.params.folder]);
+        const results = await pool.query("SELECT * FROM tasks WHERE folder_id = $1 ORDER BY task_id ASC", [+req.params.folderId]);
         res.json(results.rows);
     } catch (err) {
-        console.error(err.message);
+        console.error("Error retrieving all tasks", err.message);
     }
 });
 
-// Get a task from folder
-taskRouter.get('/get/:id', async (req, res) => {
+// Get a task
+taskRouter.get("/get/:id", async (req, res) => {
     try {
-        const results = await pool.query('SELECT * FROM tasks WHERE task_id = $1', [req.params.id]);
+        const results = await pool.query("SELECT * FROM tasks WHERE task_id = $1", [req.params.id]);
         res.json(results.rows);
     } catch (err) {
-        console.error(err.message);
+        console.error(`Error retrieving task with id ${req.params.id}`, err.message);
     }
 });
 
-// Toggle priority
-taskRouter.put('/priority/:id', async (req, res) => {
+// Change priority
+taskRouter.put("/priority/:id", async (req, res) => {
+    const { newPriority } = req.body;
     try {
-       await pool.query('UPDATE tasks SET priority = NOT priority WHERE task_id = $1', [req.params.id]);
+       await pool.query("UPDATE tasks SET priority = $1 WHERE task_id = $2", [newPriority, req.params.id]);
         res.json();
     } catch (err) {
         console.error(err.message);
     }
 });
 
-// Update a task description
-taskRouter.put('/update/:id', async (req, res) => {
+// Update a task name
+taskRouter.put("/update/:id", async (req, res) => {
     try {
-        const newText = req.body["new_description"];
-        const result = await pool.query('UPDATE tasks SET description = $1 WHERE task_id = $2 RETURNING *', [newText, req.params.id]);
+        const newText = req.body["new_name"];
+        const result = await pool.query("UPDATE tasks SET name = $1 WHERE task_id = $2 RETURNING *", [newText, req.params.id]);
         res.json(result.rows);
     } catch (err) {
-        console.error(err.message);
+        console.error("Error updating task name", err.message);
     }
 });
 
 // Change task's folder
-taskRouter.put('/move/:id', async (req, res) => {
+taskRouter.put("/move/:id", async (req, res) => {
     try {
         const { folder } = req.body;
-        await pool.query('UPDATE tasks SET folder = $1 WHERE task_id = $2 RETURNING *', [folder, req.params.id]);
+        await pool.query("UPDATE tasks SET folder = $1 WHERE task_id = $2 RETURNING *", [folder, req.params.id]);
         res.json();
     } catch (err) {
         console.error(err.message);
     }
 });
 
-taskRouter.get('/dueDate/:id', async (req, res) => {
+taskRouter.get("/dueDate/:id", async (req, res) => {
     try {
-        const results = await pool.query('SELECT due_date FROM tasks WHERE task_id = $1', [req.params.id]);
+        const results = await pool.query("SELECT due_date FROM tasks WHERE task_id = $1", [req.params.id]);
         res.json(results.rows);
     } catch (err) {
         console.error(err.message);
@@ -126,10 +122,21 @@ taskRouter.get('/dueDate/:id', async (req, res) => {
 });
 
 // Change due date
-taskRouter.put('/dateChange/:id', async (req, res) => {
+taskRouter.put("/dateChange/:id", async (req, res) => {
     try {
         const newDate = req.body["new_date"];
-        const result = await pool.query('UPDATE tasks SET due_date = $1 WHERE task_id = $2 RETURNING *', [newDate, req.params.id]);  // pg BUG? date behavior odd hence bracket access
+        const result = await pool.query("UPDATE tasks SET due_date = $1 WHERE task_id = $2 RETURNING *", [newDate, req.params.id]);
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+// Change name
+taskRouter.put("/nameChange/:id", async (req, res) => {
+    try {
+        const { newName } = req.body;
+        const result = await pool.query("UPDATE tasks SET name = $1 WHERE task_id = $2 RETURNING *", [newName, req.params.id]);
         res.json(result.rows);
     } catch (err) {
         console.error(err.message);
