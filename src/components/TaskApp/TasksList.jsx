@@ -23,6 +23,9 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
 	// State to store the ID of the task being edited
 	const [editTaskId, setEditTaskId] = useState(-1);
 
+	// State to check if task deleted
+	const [taskDeleted, setTaskDeleted] = useState(false);
+
 	// Fetch all tasks for the current folder when folder ID, new task, or edited task changes
 	useEffect(() => {
         const getAllTasks = async () => {
@@ -49,7 +52,7 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
 			}
         };
         getAllTasks();
-    }, [currFolderId, newTask, editTaskId]);
+    }, [currFolderId, newTask, editTaskId, taskDeleted]);
 
 	// Add the new task to the task list when `newTask` changes
 	useEffect(() => {
@@ -88,6 +91,8 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
 				setEditTaskId={setEditTaskId}
 				currFolderId={currFolderId}
 				newTask={newTask} 
+				setTaskDeleted={setTaskDeleted}
+				parentBottom={bottom}
 			/>
 		);
 
