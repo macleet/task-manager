@@ -15,7 +15,7 @@ const TaskAddField = ({ currFolderId, setNewTask }) => {
                     folderId: currFolderId, // Associate task with the current folder
                 });
                 // Update the state to add the new task locally
-                setNewTask((prev) => { return { ...prev, name: name, folderId: currFolderId } });
+                setNewTask((prev) => ({ ...prev, name: name, folderId: currFolderId }));
             } catch (err) {
                 console.error("Error adding new task", err.message);
             }
