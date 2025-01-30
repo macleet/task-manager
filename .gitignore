@@ -27,3 +27,4 @@ dist-ssr
 
 # Work in progress
 src/components/TimerApp/
+src/components/TaskApp/EditModal.jsx
