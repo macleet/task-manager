@@ -25,24 +25,11 @@ taskRouter.delete("/delete/all", async (req, res) => {
 });
 
 // Delete a task
-taskRouter.delete("/delete/:id", async (req, res) => {
+taskRouter.delete("/delete", async (req, res) => {
     try {
-        const { id } = req.params;
-        const folder = await pool.query("SELECT folder_id FROM tasks WHERE task_id = $1", [id]);    // Folder of task to be deleted
-        await pool.query("DELETE FROM tasks WHERE task_id = $1 RETURNING *", [id]);    // Delete task from folder
-
-        // Check if deleted task is last of folder
-        const delFolder = folder.rows[0].folder;
-
-        const folderEmpty = async () => {
-            const folders = await pool.query("SELECT * FROM tasks WHERE folder_id = $1", [delFolder]);
-            return folders ? false : true; // Check if folder is empty
-        };
-        if (folderEmpty()) {
-            await pool.query("DELETE FROM folders WHERE name = $1 AND NOT name = 'Main'", [delFolder]);     // Delete empty folder
-        }
-
-        res.json(folder.rows[0]);
+        const { id: taskId } = req.body;
+        await pool.query("DELETE FROM tasks WHERE task_id = $1", [taskId]);  // Delete task from folder
+        res.json();
     } catch (err) {
         console.error(err.message);
     }
