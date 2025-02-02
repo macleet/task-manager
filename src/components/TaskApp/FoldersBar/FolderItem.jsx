@@ -39,6 +39,8 @@ const FolderItem = ({
         try {
             await axios.delete(`http://localhost:8000/folder/delete/${folderId}`);
             setModified((prev) => !prev);
+            setCurrFolderId(1);
+            setCurrHeader("Main");
         } catch (err) {
             console.error(err.message);
         }
@@ -84,6 +86,8 @@ const FolderItem = ({
 
     // Focus and handle edit state when switching between folder items
     useEffect(() => {
+        setCurrFolderId(folderId);
+
         if (editing) {
             inputRef?.current.focus();
             setPrevName(folderName);
