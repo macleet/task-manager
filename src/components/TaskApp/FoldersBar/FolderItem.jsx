@@ -120,7 +120,7 @@ const FolderItem = ({
                     ${addFolder || (editingId > 0 && editingId !== folderId) ? "cursor-default" : editing ? "cursor-text" : "cursor-pointer"}`}
             />
             {/* Edit and Delete buttons */}
-            <div className={`relative z-0 flex gap-0.5 transition-all ${hover ? "opacity-100" : "opacity-0"}`} >
+            {folderId !== 1 && <div className={`relative z-0 flex gap-0.5 transition-all ${hover ? "opacity-100" : "opacity-0"}`} >
                 <button
                     disabled={addFolder || (editingId > 0 && editingId !== folderId)}
                     onClick={handleEdit}
@@ -135,7 +135,7 @@ const FolderItem = ({
                 >
                     <DeleteIcon fontSize="small" />
                 </button>
-            </div>
+            </div>}
         </div>
     );
 };
