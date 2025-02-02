@@ -5,7 +5,7 @@ import {
 	useRef
 } from 'react';
 
-import TaskItem from './TaskItem.jsx';
+import TaskItem from './TaskItem/TaskItem.jsx';
 import TaskAddField from './TaskAddField.jsx';
 
 import axios from 'axios';
@@ -96,7 +96,7 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
 	// Map tasks to TaskItem components
 	const mapTasks = (items) => 
 		items.map((task) => 
-			<TaskItem 
+			task.taskId && <TaskItem 
 				key={task.taskId} 
 				taskId={task.taskId} 
 				name={task.name} 
@@ -128,14 +128,10 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
 				</div>
 
 				{/* Scrollable task list container */}
-				<div 
-					ref={containerRef}
-					className="h-full scroll overflow-y-scroll overflow-x-hidden"
-				>
+				<div ref={containerRef} className="h-full scroll overflow-y-auto overflow-x-hidden" >
 					{searching ? mapTasks(searchItems) : mapTasks(taskItems)}
 				</div>
 
-				{/* Field to add new tasks */}
 				<TaskAddField currFolderId={currFolderId} setNewTask={setNewTask} />
 			</div>
 		</>
