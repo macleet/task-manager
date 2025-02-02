@@ -29,7 +29,17 @@ const ControlBar = ({ setShowFolder, setSearchItems, searching, setSearching, cu
                 const response = await axios.get('http://localhost:8000/task/search', {
                     params: { search_query: inputRef?.current.value }, // Send search query to the server
                 });
-                setSearchItems(response.data); // Update search results in state
+                const taskItems = response.data.map((task) => ({
+					taskId: task.task_id,
+					name: task.name,
+					dueDate: task.due_date ? task.due_date.split("T")[0].replaceAll("-", "/") : null,
+					priority: task.priority,
+					folderId: task.folder_id,
+					notes: task.notes,
+					activeSeconds: task.active_seconds,
+					tags: task.tags,
+				}));
+                setSearchItems(taskItems); // Update search results in state
             } catch (err) {
                 console.error(err.message); // Handle errors
             }
