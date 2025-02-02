@@ -5,31 +5,29 @@ const subtaskRouter = Router();
 import OpenAI from "openai";
 const openai = new OpenAI();
 
-// Get subtask phases for a specific task
+// Get subtask phases
 subtaskRouter.get("/phases", async (req, res) => {
     try {
         const { taskId } = req.query;
         const result = await pool.query("SELECT * FROM phases WHERE task_id = $1 ORDER BY phase_id ASC", [taskId]);
-        // Send the phases or null if none found
         res.json({ phases: result.rowCount > 0 ? result.rows : null });
     } catch (error) {
         console.error("Error retrieving subtask", error);
     }
 });
 
-// Get subtask steps for a specific phase
+// Get subtask steps
 subtaskRouter.get("/steps", async (req, res) => {
     try {
         const { phaseId } = req.query;
         const result = await pool.query("SELECT * FROM steps WHERE phase_id = $1 ORDER BY step_id ASC", [phaseId]);
-        // Send the steps or null if none found
         res.json({ steps: result.rowCount > 0 ? result.rows : null });
     } catch (error) {
         console.error("Error retrieving subtask", error);
     }
 });
 
-// Update the completion status of a phase
+// Update completed property for phase
 subtaskRouter.patch("/completedPhase", async (req, res) => {
     try {
         const { phaseId, completed } = req.body;
@@ -40,7 +38,7 @@ subtaskRouter.patch("/completedPhase", async (req, res) => {
     }
 });
 
-// Update the completion status of a step
+// Update completed property for step
 subtaskRouter.patch("/completedStep", async (req, res) => {
     try {
         const { stepId, completed } = req.body;
@@ -51,7 +49,7 @@ subtaskRouter.patch("/completedStep", async (req, res) => {
     }
 });
 
-// Generate subtask phases using OpenAI to generate subtasks
+// Generate subtask phases
 subtaskRouter.post("/generate", async (req, res) => {
     const { taskName, taskDetails, taskId } = req.body;
     try {
@@ -117,15 +115,20 @@ subtaskRouter.post("/generate", async (req, res) => {
         });
 
         const phases = await JSON.parse(response.choices[0].message.content).task.phases;
-
-        // Insert the phases and steps into the database
-        await phases.map(async (phase) => {
-            // Insert the phase into the database
-            const { phase_id: phaseId } = (await pool.query("INSERT INTO phases (task_id, phase_name, phase_description) VALUES ($1, $2, $3) RETURNING phase_id", [taskId, phase.phase_name, phase.phase_description])).rows[0];
-            
-            // Insert each step associated with the phase into the database
-            phase.steps.map(async (step) => await pool.query("INSERT INTO steps (phase_id, step_name, step_description) VALUES ($1, $2, $3)", [phaseId, step.step_name, step.step_description]));
-        });
+        
+        for (const phase of phases) {
+            const { phase_id: phaseId } = (await pool.query(
+                "INSERT INTO phases (task_id, phase_name, phase_description) VALUES ($1, $2, $3) RETURNING phase_id",
+                [taskId, phase.phase_name, phase.phase_description]
+            )).rows[0];
+        
+            for (const step of phase.steps) {
+                await pool.query(
+                    "INSERT INTO steps (phase_id, step_name, step_description) VALUES ($1, $2, $3)",
+                    [phaseId, step.step_name, step.step_description]
+                );
+            }
+        }
 
         res.json();
     } catch (error) {
