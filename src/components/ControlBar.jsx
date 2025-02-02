@@ -1,4 +1,3 @@
-import TimerIcon from '@mui/icons-material/Timer';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -71,11 +70,6 @@ const ControlBar = ({ setShowFolder, setSearchItems, searching, setSearching, cu
             </div>
 
             <div className="flex justify-end items-center w-1/4">
-                {/* Timer button */}
-                <button className="flex items-center text-slate-500 hover:text-slate-700 transition-colors mr-5">
-                    <TimerIcon />
-                </button>
-
                 {/* Search input field */}
                 <input
                     onFocus={handleInputFocus}
