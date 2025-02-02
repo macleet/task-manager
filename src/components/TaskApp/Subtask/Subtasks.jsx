@@ -41,12 +41,11 @@ export default ({ name, taskId, subtaskIsOpen }) => {
 
         try {
             setIsLoading(true); // Set loading state to true
-            const { phases } = (await axios.post(`http://localhost:8000/subtask/generate`, {
+            await axios.post(`http://localhost:8000/subtask/generate`, {
                 taskId: taskId,
                 taskName: name,
                 taskDetails: taskDetails
-            })).data;
-            setPhases(phases); // Update phases with generated subtasks
+            });
         } catch (error) {
             console.error("Error generating subtasks", error);
         } finally {
