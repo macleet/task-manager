@@ -1,5 +1,5 @@
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import TaskMenu from '../TaskMenu.jsx';
+import TaskMenu from './TaskMenu.jsx';
 import { useState } from "react";
 
 export default ({
