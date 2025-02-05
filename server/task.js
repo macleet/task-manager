@@ -67,10 +67,10 @@ taskRouter.get("/get/:id", async (req, res) => {
 });
 
 // Change priority
-taskRouter.put("/priority/:id", async (req, res) => {
-    const { newPriority } = req.body;
+taskRouter.patch("/priority", async (req, res) => {
+    const { newPriority, taskId } = req.body;
     try {
-       await pool.query("UPDATE tasks SET priority = $1 WHERE task_id = $2", [newPriority, req.params.id]);
+        await pool.query("UPDATE tasks SET priority = $1 WHERE task_id = $2", [newPriority, taskId]);
         res.json();
     } catch (err) {
         console.error(err.message);
@@ -109,7 +109,7 @@ taskRouter.get("/dueDate/:id", async (req, res) => {
 });
 
 // Change due date
-taskRouter.put("/dateChange/:id", async (req, res) => {
+taskRouter.patch("/dateChange/:id", async (req, res) => {
     try {
         const newDate = req.body["new_date"];
         const result = await pool.query("UPDATE tasks SET due_date = $1 WHERE task_id = $2 RETURNING *", [newDate, req.params.id]);
@@ -120,7 +120,7 @@ taskRouter.put("/dateChange/:id", async (req, res) => {
 });
 
 // Change name
-taskRouter.put("/nameChange/:id", async (req, res) => {
+taskRouter.patch("/nameChange/:id", async (req, res) => {
     try {
         const { newName } = req.body;
         const result = await pool.query("UPDATE tasks SET name = $1 WHERE task_id = $2 RETURNING *", [newName, req.params.id]);
