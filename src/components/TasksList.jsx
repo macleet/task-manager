@@ -56,7 +56,7 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
 				const taskItems = response.data.map((task) => ({
 					taskId: task.task_id,
 					name: task.name,
-					dueDate: task.due_date ? task.due_date.split("T")[0].replaceAll("-", "/") : null,
+					dueDate: task.due_date ? (new Date(task.due_date)).toLocaleDateString("en-US") : null,
 					priority: task.priority,
 					folderId: task.folder_id,
 					notes: task.notes,
@@ -80,7 +80,7 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
 			const newTaskItem = {
 				task_id: newTask.taskId,
 				name: newTask.name,
-				due_date: newTask.dueDate ? newTask.dueDate.split("T")[0].replaceAll("-", "/") : null,
+				// due_date: newTask.dueDate ? (new Date(dueDate)).toLocaleDateString("en-US") : null,
 				priority: newTask.priority,
 				folder_id: newTask.folderId,
 				notes: newTask.notes,
@@ -119,7 +119,7 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
 			<div className={`flex flex-col relative z-10 shadow justify-start bg-blue-100 transition-all ${showFolder ? "w-4/5" : "w-full"}`} >
 				{/* Header row for task list */}
 				<div className="scroll grid grid-cols-[repeat(13,_minmax(0,_1fr))] py-3 gap-y-0.5 text-gray-700 text-opacity-90 text-[15px]" >
-					<p className="col-span-1 text-center text-[14px]" >Subtasks</p> 
+					<p className="col-span-1 text-center text-[14px]" >Hub</p> 
 					<p className="col-span-1 text-center text-[14px]" >Priority</p> 
 					<p className="col-span-6 text-[14px]" 			  >Name</p>
 					<p className="col-span-2 text-center text-[14px]" >Deadline</p>

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import Phase from "../Subtask/Phase.jsx";
+import Phase from "./Phase.jsx";
 
-export default ({ name, taskId, subtaskIsOpen }) => {
+export default ({ name, taskId, currentTab }) => {
     const [phases, setPhases] = useState(null); // Stores the phases of the subtask
     const [isLoading, setIsLoading] = useState(false); // Tracks loading state
     const [taskDetails, setTaskDetails] = useState(""); // Stores user input for task details
@@ -54,29 +54,27 @@ export default ({ name, taskId, subtaskIsOpen }) => {
     };
 
     return (
-        phases !== null 
+        currentTab === 0 &&  phases !== null
         ?
-        <div className={`${subtaskIsOpen ? "h-full" : "h-0"} overflow-hidden flex flex-col justify-start items-start transition-all ease-in-out col-span-full`}> 
-            {phases.map((phase, index) => 
-                <div key={phase.phase_id} className="flex flex-col col-span-full w-full">
-                    <Phase
-                        isOpen={subtaskIsOpen} 
-                        name={phase.phase_name} 
-                        description={phase.phase_description}
-                        phaseId={phase.phase_id}
-                        completed={phase.completed}
-                        steps={phase.steps}
-                    />
-                    {index === phases.length - 1 || phases.length > 1 && <div className="self-center w-11/12 h-0.5 bg-blue-200" />}
-                </div>
-            )}
-        </div>
+        phases.map((phase, index) => 
+            <div key={phase.phase_id} className="flex flex-col col-span-full w-full">
+                <Phase
+                    isOpen={currentTab === 0} 
+                    name={phase.phase_name} 
+                    description={phase.phase_description}
+                    phaseId={phase.phase_id}
+                    completed={phase.completed}
+                    steps={phase.steps}
+                />
+                {index === phases.length - 1 || phases.length > 1 && <div className="self-center w-11/12 h-0.5 bg-blue-200" />}
+            </div>
+        )
         :
-        <div className={`${subtaskIsOpen ? "h-24" : "h-0"} flex justify-center items-center overflow-hidden transition-all ease-in-out col-span-full`}>
+        <div className={`${currentTab === 0 ? "h-24" : "h-0"} flex justify-center items-center overflow-hidden transition-all ease-in-out col-span-full w-full`}>
             {!isLoading && 
                 <div className="flex justify-center items-center gap-5 w-full">
                     <input 
-                        className="w-2/5 h-8 rounded p-1 px-2" 
+                        className="w-3/5 h-8 rounded p-1 px-2" 
                         type="text" 
                         placeholder={`Enter extra task details...`}
                         onKeyDown={handleInputKeydown}

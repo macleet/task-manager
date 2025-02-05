@@ -86,8 +86,6 @@ const FolderItem = ({
 
     // Focus and handle edit state when switching between folder items
     useEffect(() => {
-        setCurrFolderId(folderId);
-
         if (editing) {
             inputRef?.current.focus();
             setPrevName(folderName);

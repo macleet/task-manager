@@ -8,7 +8,7 @@ const FoldersBar = ({ setCurrHeader, currFolderId, setCurrFolderId, showFolder, 
     const [folderItems, setFolderItems] = useState([]);
     const [editingId, setEditingId] = useState(-1);
     const [modified, setModified] = useState(false);
-    const [addFolder, setAddFolder] = useState(false);
+    const [addFolder, setAddFolder] = useState(false); // TODO change to addFolderId default -1
     const inputRef = useRef(null);
 
     // Fetch folder items from the server
@@ -29,7 +29,10 @@ const FoldersBar = ({ setCurrHeader, currFolderId, setCurrFolderId, showFolder, 
 
     // Focus on the input field when adding a new folder
     useEffect(() => {
-        if (addFolder) inputRef.current?.focus();
+        if (addFolder) {
+            inputRef.current?.focus();
+            // add folderid to addedFolderId
+        }
     }, [addFolder]);
 
     // Submit the new folder to the server

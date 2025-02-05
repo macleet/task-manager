@@ -2,8 +2,8 @@ import './styles/TaskManager.css';
 import './styles/Calendar.css';
 
 import ControlBar from './components/ControlBar.jsx';
-import TasksList from './components/TaskApp/TasksList.jsx';
-import FoldersBar from "./components/TaskApp/FoldersBar/FoldersBar.jsx";
+import TasksList from './components/TasksList.jsx';
+import FoldersBar from "./components/FoldersBar/FoldersBar.jsx";
 import { useState } from 'react';
 
 function App() {

@@ -5,7 +5,7 @@ import ActiveTimer from './ActiveTimer.jsx';
 import DueDate from './DueDate.jsx';
 import PriorityIndicator from './PriorityIndicator.jsx';
 import SubtaskButton from './SubtaskButton.jsx';
-import Subtasks from '../Subtask/Subtasks.jsx';
+import Hub from '../Hub/Hub.jsx';
 
 const TaskItem = ({
     taskId,
@@ -22,7 +22,7 @@ const TaskItem = ({
     parentBottom,
 }) => {
     const tasksEndRef = useRef(null);
-    const [subtaskIsOpen, setSubtaskIsOpen] = useState(false);
+    const [hubIsOpen, setHubIsOpen] = useState(false);
 
     // Scroll to the new task if it's added
     useEffect(() => {
@@ -32,13 +32,13 @@ const TaskItem = ({
     return (
         <div ref={tasksEndRef} className="grid grid-cols-[repeat(13,_minmax(0,_1fr))] text-opacity-90 border-y-[1.25px] text-[15px]">
             <SubtaskButton 
-                subtaskIsOpen={subtaskIsOpen}
-                setSubtaskIsOpen={setSubtaskIsOpen}
+                subtaskIsOpen={hubIsOpen}
+                setSubtaskIsOpen={setHubIsOpen}
                 taskId={taskId}
                 editTaskId={editTaskId}
             />
 
-            <PriorityIndicator taskId={taskId} editTaskId={editTaskId} />
+            <PriorityIndicator priority={priority} taskId={taskId} editTaskId={editTaskId} />
 
             {/* Task name */}
             <div className={`h-16 col-span-6 flex items-center bg-opacity-40 transition-all ${editTaskId === taskId ? "bg-blue-400" : "bg-white"}`}>
@@ -77,7 +77,11 @@ const TaskItem = ({
                 setEditTaskId={setEditTaskId}
             />
 
-            <Subtasks name={name} taskId={taskId} subtaskIsOpen={subtaskIsOpen} />
+            <Hub
+                taskId={taskId}
+                name={name}
+                hubIsOpen={hubIsOpen}
+            />
         </div>
     );
 };
