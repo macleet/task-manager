@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Subtasks from './Subtask/Subtasks.jsx';
-import ProductivityChart from "./Productivity/ProductivityChart.jsx";
+import ProductivityChart from "./Productivity/Productivity.jsx";
 
 export default ({taskId, name, hubIsOpen}) => {
     const [currentTab, setCurrentTab] = useState(2);
