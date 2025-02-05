@@ -82,7 +82,6 @@ class WeekPeriod {
     }
  
     prevPeriod(jumps=1) {
-        console.log(this.start.date, this.end.date)
         for (let i = 0; i < jumps; i++) {
             this.start.date -= 7;
             this.end.date -= 7;
