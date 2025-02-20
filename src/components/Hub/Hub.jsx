@@ -3,7 +3,7 @@ import Subtasks from './Subtask/Subtasks.jsx';
 import ProductivityChart from "./Productivity/Productivity.jsx";
 
 export default ({taskId, name, hubIsOpen}) => {
-    const [currentTab, setCurrentTab] = useState(2);
+    const [currentTab, setCurrentTab] = useState(0);
 
     const onHubTaskClick = (event) => {
         setCurrentTab(+event.target.value);
@@ -28,14 +28,14 @@ export default ({taskId, name, hubIsOpen}) => {
                 >
                     Productivity
                 </button>
-                <p className="font-bold text-lg" >·</p>
+                {/* <p className="font-bold text-lg" >·</p>
                 <button 
                     value={2} 
                     onClick={onHubTaskClick}
                     className={`${currentTab === 2 ? "text-slate-700" : "text-slate-400"} text-lg transition-all ease-in-out`}
                 >
                     Tab Management
-                </button>
+                </button> */}
             </div>
 
             {/* Hub Features */}
