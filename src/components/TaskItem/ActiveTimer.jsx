@@ -15,10 +15,12 @@ export default ({taskId, editTaskId}) => {
                     }
                 });
                 setActiveTime(response.data.elapsedMinutes);
+                setIsActive(response.data.active);
             } catch (error) {
                 console.error("Error fetching elapsed time", error);
             }
         };
+        getElapsedTime();
     }, []);
 
     const toggleActiveTask = async (event) => {

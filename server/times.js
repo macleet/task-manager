@@ -19,7 +19,6 @@ timesRouter.get("/", async (req, res) => {
 timesRouter.patch("/setActive", async (req, res) => {
     try {
         const { taskId, isActive } = req.body;
-        console.log(taskId, isActive);
         await pool.query("UPDATE times SET active = $1", [false]);
         if (isActive) {
             await pool.query("UPDATE times SET active = $1 WHERE task_id = $2", [true, taskId]);
