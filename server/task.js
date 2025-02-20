@@ -6,7 +6,9 @@ const taskRouter = Router();
 taskRouter.post("/add", async (req, res) => {
     try {
         const { name, folderId } = req.body;
-        await pool.query("INSERT INTO tasks (name, folder_id) VALUES ($1, $2)", [name, folderId]);
+        const result = await pool.query("INSERT INTO tasks (name, folder_id) VALUES ($1, $2) RETURNING task_id", [name, folderId]);
+        const { task_id: taskId } = result.rows[0];
+        await pool.query("INSERT INTO times (task_id) VALUES ($1)", [taskId]);
         res.json();
     } catch (err) {
         console.error("Error creating new task", err.message);
