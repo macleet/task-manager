@@ -1,0 +1,14 @@
+services:
+  frontend:
+    build:
+      context: .
+    ports:
+      - "8080:80"
+    environment:
+      - REACT_APP_BACKEND_URL=http://server-backend-1:3000  # Use the backend container name
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    driver: bridge
