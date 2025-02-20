@@ -14,6 +14,12 @@ CREATE TABLE IF NOT EXISTS folders(
     name VARCHAR(255)
 );
 
+CREATE TABLE IF NOT EXISTS times(
+    time_id SERIAL PRIMARY KEY,
+    task_id INTEGER REFERENCES tasks(task_id) ON DELETE CASCADE,
+    elapsed_minutes INTEGER DEFAULT 0
+);
+
 CREATE TABLE IF NOT EXISTS phases (
     phase_id SERIAL PRIMARY KEY,
     task_id INTEGER REFERENCES tasks(task_id) ON DELETE CASCADE,
