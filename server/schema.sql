@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS folders(
 CREATE TABLE IF NOT EXISTS times(
     time_id SERIAL PRIMARY KEY,
     task_id INTEGER REFERENCES tasks(task_id) ON DELETE CASCADE,
-    elapsed_minutes INTEGER DEFAULT 0
+    elapsed_minutes INTEGER DEFAULT 0,
+    active BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE IF NOT EXISTS phases (
