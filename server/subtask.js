@@ -1,9 +1,10 @@
 import pool from "./db.js";
 import { Router } from "express";
+import "dotenv/config";
 const subtaskRouter = Router();
 
 import OpenAI from "openai";
-const openai = new OpenAI();
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 // Get subtask phases
 subtaskRouter.get("/phases", async (req, res) => {
