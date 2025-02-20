@@ -1,14 +1,18 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
+import AccessAlarmRoundedIcon from '@mui/icons-material/AccessAlarmRounded';
+import Timer from "./Timer";
 
 import { 
     useRef,
+    useState
 } from 'react';
 
 import axios from 'axios';
 
 const ControlBar = ({ setShowFolder, setSearchItems, searching, setSearching, currHeader }) => {
     const inputRef = useRef(null);
+    const [timerIsOpen, setTimerIsOpen] = useState(false);
 
     // Handle the input key press events
     const handleInputSubmit = (event) => {
@@ -55,8 +59,11 @@ const ControlBar = ({ setShowFolder, setSearchItems, searching, setSearching, cu
     // Toggle the folder visibility
     const handleClick = () => setShowFolder((prev) => !prev);
 
+    // Toggle timer open
+    const toggleTimer = () => setTimerIsOpen((prev) => !prev);
+
     return (
-        <div className="flex justify-between items-center gap-2 px-3 py-2 h-fit w-full rounded shadow-sm relative z-10">
+        <div className="flex justify-between items-center gap-2 px-3 py-2 h-fit w-full rounded shadow-sm relative z-50">
             <div className="flex">
                 {/* Toggle menu button */}
                 <button onClick={handleClick} className="flex justify-center items-center mr-5 text-slate-600 hover:text-slate-800 transition-colors">
@@ -69,7 +76,15 @@ const ControlBar = ({ setShowFolder, setSearchItems, searching, setSearching, cu
                 </h2>
             </div>
 
-            <div className="flex justify-end items-center w-1/4">
+            <div className="flex justify-end items-center w-1/4 gap-4">
+                <div className="relative" >
+                    <button onClick={toggleTimer} >
+                        <AccessAlarmRoundedIcon style={{color: "#475569"}} />
+                    </button>
+                    <div className={`absolute flex right-0 gap-6 ${!timerIsOpen && "hidden"}`}>
+                        <Timer />
+                    </div>
+                </div>
                 {/* Search input field */}
                 <input
                     onFocus={handleInputFocus}
