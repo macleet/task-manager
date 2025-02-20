@@ -13,7 +13,6 @@ const TaskItem = ({
     name,
     priority,
     notes,
-    activeSeconds,
     tags,
     dueDate,
     editTaskId,
@@ -52,7 +51,6 @@ const TaskItem = ({
             />
 
             <ActiveTimer 
-                activeSeconds={activeSeconds} 
                 editTaskId={editTaskId}
                 taskId={taskId}
             />
@@ -71,7 +69,6 @@ const TaskItem = ({
                 dueDate={dueDate}
                 priority={priority}
                 notes={notes}
-                activeSeconds={activeSeconds}
                 tags={tags}
                 editTaskId={editTaskId}
                 setEditTaskId={setEditTaskId}

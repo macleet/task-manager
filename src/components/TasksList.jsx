@@ -7,10 +7,13 @@ import {
 
 import TaskItem from './TaskItem/TaskItem.jsx';
 import TaskAddField from './TaskAddField.jsx';
+import { useActiveTaskContext } from '../context/ActiveTaskContext.jsx';
 
 import axios from 'axios';
 
 const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems, currFolderId}) => {
+	const { isActive } = useActiveTaskContext();
+	
 	// Task list container ref
 	const containerRef = useRef(null);
 
@@ -35,7 +38,6 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
 		priority: 0,
 		folderId: -1,
 		notes: "",
-		activeSeconds: 0,
 		tags: [],
 	});
 
@@ -60,7 +62,6 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
 					priority: task.priority,
 					folderId: task.folder_id,
 					notes: task.notes,
-					activeSeconds: task.active_seconds,
 					tags: task.tags,
 				}));
 
@@ -71,7 +72,7 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
 			}
         };
         getAllTasks();
-    }, [currFolderId, newTask, editTaskId, taskDeleted]);
+    }, [currFolderId, newTask, editTaskId, taskDeleted, isActive]);
 
 	// Add the new task to the task list when `newTask` changes
 	useEffect(() => {
@@ -84,7 +85,6 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
 				priority: newTask.priority,
 				folder_id: newTask.folderId,
 				notes: newTask.notes,
-				active_seconds: newTask.activeSeconds,
 				tags: newTask.tags,
 			};
 
@@ -103,7 +103,6 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
 				dueDate={task.dueDate} 
 				priority={task.priority} 
 				notes={task.notes}
-				activeSeconds={task.activeSeconds}
 				tags={task.tags}
 				editTaskId={editTaskId} 
 				setEditTaskId={setEditTaskId}
