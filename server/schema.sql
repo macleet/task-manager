@@ -32,5 +32,4 @@ CREATE TABLE IF NOT EXISTS steps (
     CONSTRAINT fk_phase FOREIGN KEY (phase_id) REFERENCES phases(phase_id) ON DELETE CASCADE
 );
 
-INSERT INTO folders (name)
-SELECT "Main" WHERE NOT EXISTS (SELECT 1 FROM folders WHERE name = "Main");
+INSERT INTO folders (name) VALUES ('Main');
