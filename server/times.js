@@ -6,6 +6,7 @@ timesRouter.get("/", async (req, res) => {
     try {
         const { taskId } = req.query;
         const results = await pool.query("SELECT elapsed_minutes, active FROM times WHERE task_id = $1", [taskId]);
+        console.log(results.rows)
         const { elapsed_minutes: elapsedMinutes, active } = results.rows[0];
         res.json({ 
             elapsedMinutes: elapsedMinutes,
