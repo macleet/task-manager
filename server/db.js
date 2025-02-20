@@ -6,8 +6,8 @@ import path from 'path';
 const pool = new pg.Pool({
     user: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
-    host: "db",
-    port: 5432,
+    host: process.env.POSTGRES_HOSTNAME,
+    port: process.env.POSTGRES_PORT,
     database: process.env.POSTGRES_DB
 });
 
