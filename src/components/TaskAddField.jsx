@@ -10,7 +10,7 @@ const TaskAddField = ({ currFolderId, setNewTask }) => {
         const postTask = async (name) => {
             try {
                 // Send a POST request to add the task
-                await axios.post('http://localhost:3000/task/add', {
+                await axios.post('https://task-manager-server-6eht.onrender.com/task/add', {
                     name: name,
                     folderId: currFolderId, // Associate task with the current folder
                 });

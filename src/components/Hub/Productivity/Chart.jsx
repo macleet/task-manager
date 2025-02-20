@@ -106,7 +106,7 @@ export default () => {
     // useEffect(() => {
     //     const getGraphData = async () => {
     //        try {
-    //           const response = await axios.get("https://localhost:3000");
+    //           const response = await axios.get("https://task-manager-server-6eht.onrender.com");
     //           // weekData.rest = response.data;
     //           // weekData.work = response.data;
     //           // response.data = 

@@ -23,7 +23,7 @@ export default ({ name, taskId, currentTab }) => {
 
         const getPhases = async () => {
             try {
-                const { phases } = (await axios.get(`http://localhost:3000/subtask/phases`, {
+                const { phases } = (await axios.get(`https://task-manager-server-6eht.onrender.com/subtask/phases`, {
                     params: {
                         taskId: taskId
                     }
@@ -41,7 +41,7 @@ export default ({ name, taskId, currentTab }) => {
 
         try {
             setIsLoading(true); // Set loading state to true
-            await axios.post(`http://localhost:3000/subtask/generate`, {
+            await axios.post(`https://task-manager-server-6eht.onrender.com/subtask/generate`, {
                 taskId: taskId,
                 taskName: name,
                 taskDetails: taskDetails

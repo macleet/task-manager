@@ -15,7 +15,7 @@ const TaskMenu = ({taskId, editTaskId, setEditTaskId, hover, setDeleted, contain
     
     const handleDeleteClick = async () => {
         try {
-            await axios.delete("http://localhost:3000/task/delete", {
+            await axios.delete("https://task-manager-server-6eht.onrender.com/task/delete", {
                 data: { id: taskId }
             });
             setDeleted(prev => !prev);

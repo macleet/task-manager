@@ -10,7 +10,7 @@ export default ({ stepId, name, description, completed }) => {
     const handleOnChange = async (event) => {
         try {
             setComplete(event.target.checked); // Update local state
-            await axios.patch("http://localhost:3000/subtask/completedStep", {
+            await axios.patch("https://task-manager-server-6eht.onrender.com/subtask/completedStep", {
                 stepId: stepId,
                 completed: event.target.checked // Send updated completion status to the server
             });

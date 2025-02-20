@@ -17,7 +17,7 @@ const FolderItem = ({
     // Edit folder name
     const editFolder = async () => {
         try {
-            await axios.patch(`http://localhost:3000/folder/change/${folderId}`, { name: inputRef?.current.value });
+            await axios.patch(`https://task-manager-server-6eht.onrender.com/folder/change/${folderId}`, { name: inputRef?.current.value });
         } catch (err) {
             console.error(err.message);
         }
@@ -37,7 +37,7 @@ const FolderItem = ({
     // Delete folder
     const deleteFolder = async () => {
         try {
-            await axios.delete(`http://localhost:3000/folder/delete/${folderId}`);
+            await axios.delete(`https://task-manager-server-6eht.onrender.com/folder/delete/${folderId}`);
             setModified((prev) => !prev);
             setCurrFolderId(1);
             setCurrHeader("Main");

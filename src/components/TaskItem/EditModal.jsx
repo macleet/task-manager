@@ -22,7 +22,7 @@ export default ({taskId, name, dueDate, priority, notes, activeSeconds, tags, ed
 
     const patchName = async () => {
         try {
-            await axios.patch(`http://localhost:3000/task/nameChange/${taskId}`, { "newName": taskDetails.name });
+            await axios.patch(`https://task-manager-server-6eht.onrender.com/task/nameChange/${taskId}`, { "newName": taskDetails.name });
         } catch (error) {
             console.error("Error patching name", error);
         }
@@ -30,7 +30,7 @@ export default ({taskId, name, dueDate, priority, notes, activeSeconds, tags, ed
 
     const patchPriority = async () => {
         try {
-            await axios.patch(`http://localhost:3000/task/priority`, { 
+            await axios.patch(`https://task-manager-server-6eht.onrender.com/task/priority`, { 
                 newPriority: taskDetails.priority,
                 taskId: taskId
             });
@@ -41,7 +41,7 @@ export default ({taskId, name, dueDate, priority, notes, activeSeconds, tags, ed
 
     const patchDueDate = async () => {
         try {
-            await axios.patch(`http://localhost:3000/task/dateChange/${taskId}`, {	
+            await axios.patch(`https://task-manager-server-6eht.onrender.com/task/dateChange/${taskId}`, {	
                 "new_date": taskDetails.dueDate,
             });
         } catch (error) {
