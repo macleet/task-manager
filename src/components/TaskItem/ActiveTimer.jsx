@@ -23,11 +23,9 @@ export default ({taskId, editTaskId}) => {
 
     const toggleActiveTask = async (event) => {
         try {
-            await axios.put("https://task-manager-server-6eht.onrender.com/times/setActive", {
-                params: {
-                    taskId: taskId,
-                    isActive: event.target.checked
-                }
+            await axios.patch("https://task-manager-server-6eht.onrender.com/times/setActive", {
+                taskId: taskId,
+                isActive: event.target.checked
             });
             setIsActive(event.target.checked);
             if (event.target.checked) setActiveTaskId(taskId);
