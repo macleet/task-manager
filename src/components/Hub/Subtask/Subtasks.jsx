@@ -54,7 +54,7 @@ export default ({ name, taskId, currentTab }) => {
     };
 
     return (
-        currentTab === 0 &&  phases !== null
+        currentTab === 0 && phases !== null
         ?
         phases.map((phase, index) => 
             <div key={phase.phase_id} className="flex flex-col col-span-full w-full">
@@ -70,11 +70,11 @@ export default ({ name, taskId, currentTab }) => {
             </div>
         )
         :
-        <div className={`${currentTab === 0 ? "h-24" : "h-0"} flex justify-center items-center overflow-hidden transition-all ease-in-out col-span-full w-full`}>
+        <div className={`${currentTab !== 0 && "hidden"} flex justify-center items-center overflow-hidden transition-all ease-in-out col-span-full w-full`}>
             {!isLoading && 
-                <div className="flex justify-center items-center gap-5 w-full">
+                <div className="flex flex-col justify-center items-end gap-5 w-4/5 h-32">
                     <input 
-                        className="w-3/5 h-8 rounded p-1 px-2" 
+                        className="w-full h-8 rounded p-1 px-2" 
                         type="text" 
                         placeholder={`Enter extra task details...`}
                         onKeyDown={handleInputKeydown}
