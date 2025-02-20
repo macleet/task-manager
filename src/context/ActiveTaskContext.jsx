@@ -3,10 +3,9 @@ import React, { createContext, useState, useContext } from 'react';
 const ActiveTaskContext = createContext();
 
 export const ActiveTaskProvider = ({ children }) => {
-    const [isActive, setIsActive] = useState(false);
     const [activeTaskId, setActiveTaskId] = useState(-1);
     return (
-        <ActiveTaskContext.Provider value={{ isActive, setIsActive, activeTaskId, setActiveTaskId }}>
+        <ActiveTaskContext.Provider value={{ activeTaskId, setActiveTaskId }}>
             {children}
         </ActiveTaskContext.Provider>
   );

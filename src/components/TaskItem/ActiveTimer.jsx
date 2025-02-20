@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import { useActiveTaskContext } from "../../context/ActiveTaskContext";
 
 export default ({taskId, editTaskId}) => {
-    const {isActive, setIsActive, setActiveTaskId} = useActiveTaskContext();
+    const {setActiveTaskId} = useActiveTaskContext();
+    const [isActive, setIsActive] = useState(false);
     const [activeTime, setActiveTime] = useState(0);
 
     useEffect(() => {
@@ -14,8 +15,8 @@ export default ({taskId, editTaskId}) => {
                         taskId: taskId
                     }
                 });
-                setActiveTime(response.data.elapsedMinutes);
                 setIsActive(response.data.active);
+                setActiveTime(response.data.elapsedMinutes);
             } catch (error) {
                 console.error("Error fetching elapsed time", error);
             }
@@ -31,6 +32,7 @@ export default ({taskId, editTaskId}) => {
             });
             setIsActive(event.target.checked);
             if (event.target.checked) setActiveTaskId(taskId);
+            else setActiveTaskId(-1);
         } catch (error) {
             console.error("Error toggling active task", error);
         }
