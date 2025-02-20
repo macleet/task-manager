@@ -7,13 +7,9 @@ import {
 
 import TaskItem from './TaskItem/TaskItem.jsx';
 import TaskAddField from './TaskAddField.jsx';
-import { useActiveTaskContext } from '../context/ActiveTaskContext.jsx';
-
 import axios from 'axios';
 
 const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems, currFolderId}) => {
-	const { isActive } = useActiveTaskContext();
-	
 	// Task list container ref
 	const containerRef = useRef(null);
 
@@ -72,7 +68,7 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
 			}
         };
         getAllTasks();
-    }, [currFolderId, newTask, editTaskId, taskDeleted, isActive]);
+    }, [currFolderId, newTask, editTaskId, taskDeleted]);
 
 	// Add the new task to the task list when `newTask` changes
 	useEffect(() => {
