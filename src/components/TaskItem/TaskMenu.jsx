@@ -9,21 +9,13 @@ const TaskMenu = ({taskId, editTaskId, setEditTaskId, hover, setDeleted, contain
         if (!hover && !isOverflowing) return;
         setIsOverflowing(menuContainerRef.current?.getBoundingClientRect().bottom > containerBottom);
     }, [hover, containerBottom])
-
-    const handleSubtaskClick = () => {
-        try {
-            // axios.get
-        } catch (error) {
-            console.error(`Error deleting task ${taskId}`, error);
-        } 
-    };
     
     // Toggle the edit mode for the current task
     const handleEditClick = () => setEditTaskId(editTaskId === taskId ? -editTaskId : taskId);
     
     const handleDeleteClick = async () => {
         try {
-            await axios.delete("http://localhost:8000/task/delete", {
+            await axios.delete("http://localhost:3000/task/delete", {
                 data: { id: taskId }
             });
             setDeleted(prev => !prev);

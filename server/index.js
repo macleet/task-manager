@@ -6,10 +6,12 @@ import cors from "cors";
 import express from "express";
 
 const app = express();
-const PORT = 8000;
+const PORT = 3000;
 
 /* Middlewares */
-app.use(cors());
+app.use(cors({
+    origin: "*"
+}));
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 

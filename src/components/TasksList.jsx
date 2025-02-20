@@ -50,7 +50,7 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
         const getAllTasks = async () => {
 			try {
 				// Fetch tasks from the API
-				const response = await axios.get(`http://localhost:8000/task/getAll/${currFolderId}`);
+				const response = await axios.get(`http://localhost:3000/task/getAll/${currFolderId}`);
 				
 				// Map response data to the required format
 				const taskItems = response.data.map((task) => ({

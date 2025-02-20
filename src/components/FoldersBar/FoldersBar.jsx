@@ -15,7 +15,7 @@ const FoldersBar = ({ setCurrHeader, currFolderId, setCurrFolderId, showFolder, 
     useEffect(() => {
         const getFolders = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/folder/');
+                const response = await axios.get('http://localhost:3000/folder/');
                 setFolderItems(response.data);
             } catch (error) {
                 console.error("Error fetching folders", error);
@@ -38,7 +38,7 @@ const FoldersBar = ({ setCurrHeader, currFolderId, setCurrFolderId, showFolder, 
     // Submit the new folder to the server
     const addNewFolder = async (name) => {
         try {
-            const response = await axios.post(`http://localhost:8000/folder/add/${name}`);
+            const response = await axios.post(`http://localhost:3000/folder/add/${name}`);
             return response.data; // Assuming the server returns the new folder ID
         } catch (error) {
             console.error("Error adding new folder", error);

@@ -25,7 +25,7 @@ const ControlBar = ({ setShowFolder, setSearchItems, searching, setSearching, cu
         // Function to fetch search results from the server
         const getSearchRes = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/task/search', {
+                const response = await axios.get('http://localhost:3000/task/search', {
                     params: { search_query: inputRef?.current.value }, // Send search query to the server
                 });
                 const taskItems = response.data.map((task) => ({

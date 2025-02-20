@@ -13,7 +13,7 @@ export default ({ phaseId, name, description, completed, isOpen, steps }) => {
     const handleOnChange = async (event) => {
         try {
             setComplete(event.target.checked); // Update local state
-            await axios.patch("http://localhost:8000/subtask/completedPhase", {
+            await axios.patch("http://localhost:3000/subtask/completedPhase", {
                 phaseId: phaseId,
                 completed: event.target.checked // Send updated completion status to the server
             });
@@ -26,7 +26,7 @@ export default ({ phaseId, name, description, completed, isOpen, steps }) => {
     useEffect(() => {
         const getSteps = async () => {
             try {
-                const { steps } = (await axios.get("http://localhost:8000/subtask/steps", {
+                const { steps } = (await axios.get("http://localhost:3000/subtask/steps", {
                     params: {
                         phaseId: phaseId
                     }
