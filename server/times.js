@@ -7,7 +7,7 @@ timesRouter.get("/getActive", async (req, res) => {
         const { taskId } = req.query;
         const results = await pool.query("SELECT active FROM times WHERE task_id = $1", [taskId]);
         const { active } = results.rows[0];
-        res.json({ active });
+        res.json({ active: active });
     } catch (error) {
         console.error("Error getting active boolean for task", error);
     }
@@ -18,7 +18,7 @@ timesRouter.get("/getElapsedMinutes", async (req, res) => {
         const { taskId } = req.query;
         const results = await pool.query("SELECT elapsed_minutes, active FROM times WHERE task_id = $1", [taskId]);
         const { elapsed_minutes: elapsedMinutes } = results.rows[0];
-        res.json({ elapsedMinutes });
+        res.json({ elapsedMinutes: elapsedMinutes });
     } catch (error) {
         console.error("Error getting elapsed time for task", error);
     }
