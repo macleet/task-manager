@@ -5,7 +5,12 @@ const folderRouter = Router();
 // Get all folders
 folderRouter.get("/", async (req, res) => {
     try {
-        const folders = await pool.query("SELECT * FROM folders ORDER BY folder_id ASC");
+        let folders = await pool.query("SELECT * FROM folders ORDER BY folder_id ASC");
+        if (folders.rowCount === 0) {
+            await pool.query("INSERT INTO folders (name) VALUES ($1);", ["Main"]);
+            folders = await pool.query("SELECT * FROM folders ORDER BY folder_id ASC");
+        }
+        
         res.json(folders.rows);
     } catch (err) {
         console.error(err.message);

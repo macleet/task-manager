@@ -31,5 +31,3 @@ CREATE TABLE IF NOT EXISTS steps (
     phase_id INTEGER NOT NULL,
     CONSTRAINT fk_phase FOREIGN KEY (phase_id) REFERENCES phases(phase_id) ON DELETE CASCADE
 );
-
-INSERT INTO folders (name) VALUES ('Main');
