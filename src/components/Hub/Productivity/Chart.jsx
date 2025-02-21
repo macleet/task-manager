@@ -12,28 +12,26 @@ import {
     Legend 
 } from 'chart.js';
 import axios from "axios";
+import { useTimerContext } from "../../../context/TimerContext";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default ({ taskId }) => {
+    const { paused } = useTimerContext();
     const [weekPeriod, setWeekPeriod] = useState(new WeekPeriod());
-    const [weekData, setWeekData] = useState({
-        rest: [2, 1, 1, 1, 2, 3, 0], 
-        work: [5, 3, 3, 4, 5, 8, 1],
-    });
 
     const [chartData, setChartData] = useState({
         labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
         datasets: [
             {
                 label: 'Rested',
-                data: weekData.rest,
+                data: [],
                 backgroundColor: '#547bc9',
                 borderRadius: 2,
             },
             {
                 label: 'Worked',
-                data: weekData.work,
+                data: [],
                 backgroundColor: 'rgb(204, 162, 126)',
                 borderRadius: 2,
             },
@@ -105,6 +103,7 @@ export default ({ taskId }) => {
     };
 
     useEffect(() => {
+        if (!paused) return;
         const getGraphData = async () => {
             try {
                 const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getChartData", {
@@ -114,16 +113,29 @@ export default ({ taskId }) => {
                     }
                 });
                 const { activeData, restData } = response.data;
-                setWeekData({
-                    rest: restData, 
-                    work: activeData
+                setChartData({
+                    labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                    datasets: [
+                        {
+                            label: 'Rested',
+                            data: restData,
+                            backgroundColor: '#547bc9',
+                            borderRadius: 2,
+                        },
+                        {
+                            label: 'Worked',
+                            data: activeData,
+                            backgroundColor: 'rgb(204, 162, 126)',
+                            borderRadius: 2,
+                        },
+                    ],
                 });
             } catch (error) {
                console.error("GET request error for retrieving graph data", error);
             }
         };
         getGraphData();
-    }, [weekPeriod]);
+    }, [weekPeriod, paused]);
 
     return(
         <div className="flex flex-col bg-blue-200 bg-opacity-40 rounded-xl w-1/2 shadow-sm" >
