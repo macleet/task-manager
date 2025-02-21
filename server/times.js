@@ -24,6 +24,17 @@ timesRouter.get("/getElapsedMinutes", async (req, res) => {
     }
 });
 
+timesRouter.get("/getRestedMinutes", async (req, res) => {
+    try {
+        const { taskId } = req.query;
+        const results = await pool.query("SELECT rested_minutes, active FROM times WHERE task_id = $1", [taskId]);
+        const { rested_minutes: restedMinutes, active } = results.rows[0];
+        res.json({ restedMinutes, active });
+    } catch (error) {
+        console.error("Error getting elapsed time for task", error);
+    }
+});
+
 timesRouter.patch("/setActive", async (req, res) => {
     try {
         const { taskId, isActive } = req.body;
