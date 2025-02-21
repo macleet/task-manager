@@ -45,7 +45,7 @@ class WeekPeriod {
             datesArray.push(tempDate);
         }
 
-        console.log([...datesArray]);
+        return datesArray;
     }
 
     checkCases() {
