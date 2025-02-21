@@ -17,8 +17,8 @@ timesRouter.get("/getElapsedMinutes", async (req, res) => {
     try {
         const { taskId } = req.query;
         const results = await pool.query("SELECT elapsed_minutes, active FROM times WHERE task_id = $1", [taskId]);
-        const { elapsed_minutes: elapsedMinutes } = results.rows[0];
-        res.json({ elapsedMinutes: elapsedMinutes });
+        const { elapsed_minutes: elapsedMinutes, active } = results.rows[0];
+        res.json({ elapsedMinutes, active });
     } catch (error) {
         console.error("Error getting elapsed time for task", error);
     }
