@@ -14,39 +14,47 @@ import { useTimerContext } from '../context/TimerContext';
 
 export default ({}) => {
     const { activeTaskId } = useActiveTaskContext();
+    const [activeTask, setActiveTask] = useState({
+        taskName: "",
+        folderName: ""
+    });
     const [currentSession, setCurrentSession] = useState(null);
     const [minutes, setMinutes] = useState(null);
     const [seconds, setSeconds] = useState(0);
     const {paused, setPaused} = useTimerContext();
 
     useEffect(() => {
-        if (currentSession) return;
-
-        const sessionQueue = new SessionCircularList();
-
-        const workSession = new SessionNode("work", 30);
-        const breakSession = new SessionNode("break", 10);
-        const longBreakSession = new SessionNode("longbreak", 25);
-
-        sessionQueue.append(workSession);
-        sessionQueue.append(breakSession);
-        sessionQueue.append(workSession);
-        sessionQueue.append(longBreakSession);
-
-        setCurrentSession(sessionQueue.head);
-        setMinutes(sessionQueue.head.duration);
+        
+        if (activeTaskId > 0) {
+            const getActiveTask = async () => {
+                const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getActiveTask");
+                const { taskName, folderName } = response.data;
+                setActiveTask({ taskName, folderName });
+            };
+            getActiveTask();
+        } else if (!currentSession) {
+            const sessionQueue = new SessionCircularList();
+            const workSession = new SessionNode("work", 30);
+            const breakSession = new SessionNode("break", 10);
+            const longBreakSession = new SessionNode("longbreak", 25);
+    
+            sessionQueue.append(workSession);
+            sessionQueue.append(breakSession);
+            sessionQueue.append(workSession);
+            sessionQueue.append(longBreakSession);
+    
+            setCurrentSession(sessionQueue.head);
+            setMinutes(sessionQueue.head.duration);
+        }
     }, []);
 
     useEffect(() => {
         if (paused) return;
-
         if (minutes === 0 && seconds === 0) return;
-
         if (seconds === -1 && minutes > 0) {
             setMinutes(minutes-1);
             setSeconds(59);
         }
-        
         if (seconds < 60) {
             const timerId = setTimeout(() => setSeconds(seconds-1), 10);
             return () => clearTimeout(timerId);
@@ -122,9 +130,9 @@ export default ({}) => {
 
             <div className={`${activeTaskId < 0 && "hidden"} w-full flex flex-col gap-0.5`} >
                 <p className="text-sm font-medium text-slate-600" >Current task</p>
-                <div className="flex flex-col bg-blue-300 rounded p-1 px-2">
-                    <p className="text-sm font-medium" >name</p>
-                    <p className="text-sm font-medium" >folder</p>
+                <div className="flex flex-col justify-center bg-blue-300 rounded py-1 px-2">
+                    <p className="text-sm font-medium" >{activeTask.taskName}</p>
+                    <p className="text-sm font-medium text-slate-600" >{activeTask.folderName}</p>
                 </div>
             </div>
         </div>
