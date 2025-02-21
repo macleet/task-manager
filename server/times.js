@@ -1,5 +1,6 @@
 import pool from "./db.js";
 import { Router } from "express";
+import { convertTimeDuration } from "./utilities.js";
 const timesRouter = Router();
 
 timesRouter.get("/getActive", async (req, res) => {
@@ -18,7 +19,8 @@ timesRouter.get("/getElapsedMinutes", async (req, res) => {
         const { taskId } = req.query;
         const results = await pool.query("SELECT elapsed_minutes, active FROM times WHERE task_id = $1", [taskId]);
         const { elapsed_minutes: elapsedMinutes, active } = results.rows[0];
-        res.json({ elapsedMinutes, active });
+        const durationText = convertTimeDuration(elapsedMinutes);
+        res.json({ durationText, active });
     } catch (error) {
         console.error("Error getting elapsed time for task", error);
     }
@@ -29,7 +31,8 @@ timesRouter.get("/getRestedMinutes", async (req, res) => {
         const { taskId } = req.query;
         const results = await pool.query("SELECT rested_minutes, active FROM times WHERE task_id = $1", [taskId]);
         const { rested_minutes: restedMinutes, active } = results.rows[0];
-        res.json({ restedMinutes, active });
+        const durationText = convertTimeDuration(restedMinutes);
+        res.json({ durationText, active });
     } catch (error) {
         console.error("Error getting rested time for task", error);
     }

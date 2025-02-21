@@ -44,14 +44,12 @@ export default ({}) => {
         if (activeTaskId > 0) {
             const getActiveTask = async () => {
                 try {
-                    console.log(activeTaskId);
                     const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getActiveTask", {
                         params: {
                             taskId: activeTaskId
                         }
                     });
                     const { taskName, folderName } = response.data;
-                    console.log(taskName, folderName);
                     setActiveTask({ taskName, folderName });
                 } catch (error) {
                     console.error("Error retrieving (GET) active task info", error);
@@ -145,7 +143,7 @@ export default ({}) => {
                 <p className="text-sm font-medium text-slate-600" >Current task</p>
                 <div className="flex flex-col justify-center bg-blue-300 rounded py-1 px-2">
                     <p className="text-sm font-medium" >{activeTask.taskName}</p>
-                    <p className="text-sm font-medium text-slate-600" >{activeTask.folderName}</p>
+                    <p className="text-sm text-slate-600" >{activeTask.folderName}</p>
                 </div>
             </div>
         </div>

@@ -7,7 +7,7 @@ export default ({ taskId, editTaskId }) => {
     const { activeTaskId, setActiveTaskId } = useActiveTaskContext();
     const { paused } = useTimerContext();
     const [isActive, setIsActive] = useState(false);
-    const [activeTime, setActiveTime] = useState(0);
+    const [activeTime, setActiveTime] = useState("");
 
     const fetchActive = async () => {
         try {
@@ -34,7 +34,7 @@ export default ({ taskId, editTaskId }) => {
                     }
                 });
                 if (response.data.active) setActiveTaskId(taskId);
-                setActiveTime(response.data.elapsedMinutes);
+                setActiveTime(response.data.durationText);
             } catch (error) {
                 console.error("Error fetching elapsed time", error);
             }
