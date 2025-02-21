@@ -1,5 +1,5 @@
 import pool from "./db.js";
-import e, { Router } from "express";
+import { Router } from "express";
 import { convertTimeDuration } from "./utilities.js";
 const timesRouter = Router();
 
