@@ -10,13 +10,14 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import { SessionNode, SessionCircularList } from '../utilities/Session';
 import { useActiveTaskContext } from '../context/ActiveTaskContext';
+import { useTimerContext } from '../context/TimerContext';
 
 export default ({}) => {
     const { activeTaskId } = useActiveTaskContext();
     const [currentSession, setCurrentSession] = useState(null);
     const [minutes, setMinutes] = useState(null);
     const [seconds, setSeconds] = useState(0);
-    const [paused, setPaused] = useState(true);
+    const {paused, setPaused} = useTimerContext();
 
     useEffect(() => {
         if (currentSession) return;
@@ -119,8 +120,12 @@ export default ({}) => {
                 {currentSession !== null && currentSession.type === "longbreak" && "Long break!"}
             </span>
 
-            <div className={`${activeTaskId < 0 && "hidden"} w-full`} >
+            <div className={`${activeTaskId < 0 && "hidden"} w-full flex flex-col gap-0.5`} >
                 <p className="text-sm font-medium text-slate-600" >Current task</p>
+                <div className="flex flex-col bg-blue-300 rounded p-1 px-2">
+                    <p className="text-sm font-medium" >name</p>
+                    <p className="text-sm font-medium" >folder</p>
+                </div>
             </div>
         </div>
     );

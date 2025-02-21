@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useActiveTaskContext } from "../../context/ActiveTaskContext";
+import { useTimerContext } from "../../context/TimerContext";
 
 export default ({ taskId, editTaskId }) => {
     const { activeTaskId, setActiveTaskId } = useActiveTaskContext();
+    const { paused } = useTimerContext();
     const [isActive, setIsActive] = useState(false);
     const [activeTime, setActiveTime] = useState(0);
 
@@ -21,6 +23,8 @@ export default ({ taskId, editTaskId }) => {
     };
 
     useEffect(() => {
+        if (!paused) return; // Update elapsed time only when paused
+
         const initializeTime = async () => {
             try {
                 await fetchActive();
@@ -36,7 +40,7 @@ export default ({ taskId, editTaskId }) => {
             }
         };
         initializeTime();
-    }, []);
+    }, [paused]);
 
     useEffect(() => {
         fetchActive();
