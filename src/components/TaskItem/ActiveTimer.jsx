@@ -29,6 +29,8 @@ export default ({ taskId, editTaskId }) => {
                         taskId: taskId
                     }
                 });
+                console.log(response.data.active)
+                // if (response.data.active) setActiveTaskId(taskId);
                 setActiveTime(response.data.elapsedMinutes);
             } catch (error) {
                 console.error("Error fetching elapsed time", error);
@@ -49,8 +51,7 @@ export default ({ taskId, editTaskId }) => {
                 isActive: isChecked
             });
             await fetchActive();
-            if (isChecked) setActiveTaskId(taskId);
-            else setActiveTaskId(-1);
+            setActiveTaskId(isChecked ? taskId : -1);
         } catch (error) {
             console.error("Error toggling active task", error);
         }
