@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS times(
     elapsed_minutes INTEGER DEFAULT 0,
     active BOOLEAN DEFAULT FALSE,
     rested_minutes INTEGER DEFAULT 0,
-    date DATE
+    date DATE DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE IF NOT EXISTS phases (
