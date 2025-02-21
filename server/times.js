@@ -59,4 +59,21 @@ timesRouter.patch("/setRestedMinutes", async (req, res) => {
     }
 });
 
+timesRouter.get("/getActiveTask", async (req, res) => {
+    const { taskId } = req.query;
+    try {
+        const query = `
+            SELECT folders.name AS folder_name, tasks.name AS task_name
+            FROM tasks
+            JOIN folders ON tasks.folder_id = folders.folder_id
+            WHERE tasks.task_id = $1;
+        `;
+        const result = pool.query(query, [taskId]);
+        const { folder_name: folderName, task_name: taskName } = result.rows[0];
+        res.json({ folderName, taskName });
+    } catch (error) {
+        console.error("Error getting active task info", error);
+    }
+});
+
 export default timesRouter;
