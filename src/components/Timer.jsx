@@ -22,6 +22,10 @@ export default ({}) => {
     const [minutes, setMinutes] = useState(null);
     const [seconds, setSeconds] = useState(0);
     const {paused, setPaused} = useTimerContext();
+    const [pausedTime, setPausedTime] = useState({
+        minutes: minutes,
+        seconds, seconds
+    });
 
     useEffect(() => {
         const sessionQueue = new SessionCircularList();
@@ -37,6 +41,10 @@ export default ({}) => {
         setCurrentSession(sessionQueue.head);
         setMinutes(sessionQueue.head.duration);
         setSeconds(0);
+        setPausedTime({
+            minutes: sessionQueue.head.duration,
+            seconds: 0
+        });
     }, [activeTaskId]);
 
     useEffect(() => {
@@ -74,12 +82,19 @@ export default ({}) => {
         }
     }, [seconds, paused]);
 
+    
+
     const handleTogglePause = async () => {
         setPaused(!paused);
 
         if (paused || activeTaskId < 0) return;
 
-        const elapsedMinutes = Math.round(((currentSession.duration - minutes) * 60 - seconds) / 60);
+        const elapsedMinutes = Math.round(((pausedTime.minutes - minutes) * 60 - (pausedTime.seconds - seconds)) / 60);
+        console.log(elapsedMinutes)
+        setPausedTime({
+            minutes: minutes,
+            seconds: seconds
+        });
         if (currentSession.type === "work") {
             try {
                 await axios.patch("https://task-manager-server-6eht.onrender.com/times/setElapsedMinutes", {
@@ -105,14 +120,22 @@ export default ({}) => {
         setSeconds(0);
         setPaused(true);
         setCurrentSession(currentSession.next);
-        setMinutes(currentSession.next.duration);      
+        setMinutes(currentSession.next.duration);
+        setPausedTime({
+            minutes: currentSession.next.duration,
+            seconds: 0
+        });
     };
 
     const handlePrev = () => {
         setSeconds(0);
         setPaused(true);
         setCurrentSession(currentSession.prev);
-        setMinutes(currentSession.prev.duration);  
+        setMinutes(currentSession.prev.duration);
+        setPausedTime({
+            minutes: currentSession.prev.duration,
+            seconds: 0
+        });
     };
 
     return(
