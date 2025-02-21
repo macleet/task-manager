@@ -1,6 +1,6 @@
 import WeekPeriod from "../../../utilities/WeekPeriod";
 import WeekNavigator from "./WeekNavigator";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { 
     Chart as ChartJS, 
@@ -14,7 +14,7 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-export default () => {
+export default ({ taskId }) => {
     const [weekPeriod, setWeekPeriod] = useState(new WeekPeriod());
     const [weekData, setWeekData] = useState({
         rest: [2, 1, 1, 1, 2, 3, 0], 
@@ -103,25 +103,26 @@ export default () => {
         },
     };
 
-    // useEffect(() => {
-    //     const getGraphData = async () => {
-    //        try {
-    //           const response = await axios.get("https://task-manager-server-6eht.onrender.com");
-    //           // weekData.rest = response.data;
-    //           // weekData.work = response.data;
-    //           // response.data = 
-    //           setWeekData({
-    //              rest: weekData.rest, 
-    //              work: weekData.work
-    //           });
-              
-    //        } catch (err) {
-    //           console.error("Axios GET request error (graph data): ", err);
-    //        }
-    //     };
-  
-    //     getGraphData();
-    //  }, [weekPeriod]);
+    useEffect(() => {
+        const getGraphData = async () => {
+            try {
+                const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getChartData", {
+                    params: {
+                        taskId: taskId,
+                        periodDates: weekPeriod.getPeriodDatesArray()
+                    }
+                });
+                const { activeData, restData } = response.data;
+                setWeekData({
+                    rest: activeData, 
+                    work: restData
+                });
+            } catch (error) {
+               console.error("GET request error for retrieving graph data", error);
+            }
+        };
+        getGraphData();
+    }, [weekPeriod]);
 
     return(
         <div className="flex flex-col bg-blue-200 bg-opacity-40 rounded-xl w-1/2 shadow-sm" >
