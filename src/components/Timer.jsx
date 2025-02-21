@@ -66,7 +66,7 @@ export default ({}) => {
             setSeconds(59);
         }
         if (seconds < 60) {
-            const timerId = setTimeout(() => setSeconds(seconds-1), 10);
+            const timerId = setTimeout(() => setSeconds(seconds-1), 1000);
             return () => clearTimeout(timerId);
         }
     }, [seconds, paused]);
