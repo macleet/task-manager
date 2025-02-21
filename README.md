@@ -1,7 +1,6 @@
-# Task Manager
+# 📋 Productivity App
 
-## Introduction
-This web application is a task manager with which we can create task items and organize them using various functionalities. Sort, prioritize, set due dates, and create folders to simplify your task organization process.
+A feature-rich productivity app designed to help you manage tasks, boost efficiency, and balance work with rest. Organize your tasks, track deadlines, focus with a Pomodoro timer, and gain insights into your productivity—all in one place.
 
 ## Table of Contents
 - [Key Features](#key-features)
@@ -12,19 +11,37 @@ This web application is a task manager with which we can create task items and o
 - [Usage](#usage)
 - [Architecture](#architecture)
 
-## Key Features
-- Task Folders
-  - You can categorize your tasks by adding them into folders.
-  - You can add new folders by entering a folder name into the add folder input field.
-- Task Prioritization
-  - You can prioritize your tasks by clicking the star button.
-  - The clicked task should move to the top of your tasks list, and back to its original position on unclicking.
-- Task Searching
-  - As you enter a task name to search, the tasks that match this string will pop up in the tasks list.
-- Task Due Dates
-  - Due dates can be set for you to keep track of the deadline of your tasks.
-  - A calendar pops up for you to set the a future date.
-  - The due date box will change color as the due date approaches.
+## 🚀 Key Features
+
+### 📁 Task Organization with Folders  
+- Categorize tasks into customizable folders for structured project management.  
+- Easily create new folders by entering a folder name into the input field.  
+
+### 🔍 Advanced Task Search  
+- Quickly find tasks using real-time search functionality.  
+- Supports partial string matches and optimized for large task lists.
+
+### 🗓️ Due Date Management  
+- Assign due dates to tasks using an intuitive date picker.  
+- Visual indicators highlight approaching deadlines, with color-coded due date fields based on urgency.
+
+### ⏱️ Pomodoro Timer Integration  
+- Stay focused with a built-in Pomodoro timer featuring work and break intervals.  
+- Track productivity with real-time stats:  
+  - **Total Work Time** and **Total Rest Time** displayed on stats tiles.  
+  - **Weekly navigable stacked bar charts** visualize daily productivity, showing work vs. rest sessions for each date.
+
+### 🤖 AI-Generated Subtasks  
+- Streamline workflows with **OpenAI LLM**-powered subtask generation.  
+- Automatically break down complex tasks into actionable subtasks for more efficient completion.
+
+### ⚡ Task Prioritization  
+- Set task priorities (**High**, **Medium**, or **Low**) to focus on what's most important.  
+- Priority levels are visually distinct, making it easy to organize and sort tasks based on urgency.
+
+### 📈 Productivity Insights  
+- Integrated analytics track your work and rest patterns.  
+- Weekly charts help you optimize productivity and maintain balance.
 
 ## Tech Stack
 This web application features a React frontend styled with Tailwind CSS, enhanced by Material UI icons, and utilizes react-chartjs-2 for dynamic productivity tracking charts. It integrates OpenAI's LLM to intelligently generate subtasks, streamlining task management.
