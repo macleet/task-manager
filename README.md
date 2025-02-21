@@ -8,7 +8,8 @@ A feature-rich productivity app designed to help you manage tasks, boost efficie
 - [Tech Stack](#tech-stack)
 
 ## Usage
-[Live demo](https://task-manager-front-bmmt.onrender.com/)
+<a href="https://task-manager-front-bmmt.onrender.com/" target="_blank">Live demo</a>
+
 Note: Due to deployment on Render.com with free tier, you may experience initial delays due to automatic spin-down when idle.
 
 ## 🚀 Key Features
