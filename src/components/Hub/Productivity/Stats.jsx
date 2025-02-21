@@ -1,7 +1,38 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
 
-export default () => {
+export default ({ taskId }) => {
+    const [activeTime, setActiveTime] = useState("");
+    const [restedTime, setRestedTime] = useState("");
+
+    useEffect(() => {
+        const initializeTimes = async () => {
+            try {
+                const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getElapsedMinutes", {
+                    params: {
+                        taskId: taskId
+                    }
+                });
+                setActiveTime(response.data.durationText);
+            } catch (error) {
+                console.error("Error fetching elapsed time in Stats component", error);
+            }
+            
+            try {
+                const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getRestedMinutes", {
+                    params: {
+                        taskId: taskId
+                    }
+                });
+                setRestedTime(response.data.durationText);
+            } catch (error) {
+                console.error("Error fetching rested time in Stats component", error);
+            }
+        };
+        initializeTimes();
+    }, []);
     return(
         <div className="flex w-1/5 flex-col gap-6" >
             <div className="w-full flex flex-col justify-between py-2 px-3 bg-blue-200 bg-opacity-40 h-1/2 rounded-xl shadow-sm">
@@ -9,8 +40,8 @@ export default () => {
                     <WorkHistoryIcon sx={{ fontSize: 40, color: "rgb(220 150 90)" }} />
                 </div>
                 <div className="flex justify-between items-end " >
-                    <span>Worked</span>
-                    <span><span className="text-lg">0</span> hrs</span>
+                    <span className="font-medium" >Worked</span>
+                    <span>{activeTime}</span>
                 </div>
             </div>
 
@@ -19,8 +50,8 @@ export default () => {
                     <SelfImprovementIcon sx={{ fontSize: 44, color: "rgb(59 150 246)" }} />
                 </div>
                 <div className="flex justify-between items-end" >
-                    <span>Rested</span>
-                    <span><span className="text-lg">0</span> hrs</span>
+                    <span className="font-medium" >Rested</span>
+                    <span>{restedTime}</span>
                 </div>
             </div>
         </div>
