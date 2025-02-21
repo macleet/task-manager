@@ -63,7 +63,7 @@ const ControlBar = ({ setShowFolder, setSearchItems, searching, setSearching, cu
     const toggleTimer = () => setTimerIsOpen((prev) => !prev);
 
     return (
-        <div className="flex justify-between items-center gap-2 px-3 py-2 h-fit w-full rounded shadow-sm relative z-50">
+        <div className="flex justify-between items-center gap-2 px-3 py-2 h-fit w-full rounded shadow-sm">
             <div className="flex">
                 {/* Toggle menu button */}
                 <button onClick={handleClick} className="flex justify-center items-center mr-5 text-slate-600 hover:text-slate-800 transition-colors">
@@ -77,7 +77,7 @@ const ControlBar = ({ setShowFolder, setSearchItems, searching, setSearching, cu
             </div>
 
             <div className="flex justify-end items-center w-1/4 gap-4">
-                <div className="relative" >
+                <div className="relative z-50" >
                     <button onClick={toggleTimer} >
                         <AccessAlarmRoundedIcon style={{color: "#475569"}} />
                     </button>

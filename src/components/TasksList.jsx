@@ -111,27 +111,24 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
 		);
 
 	return (
-		<>
-			{/* Container for the task list */}
-			<div className={`flex flex-col relative z-10 shadow justify-start bg-blue-100 transition-all ${showFolder ? "w-4/5" : "w-full"}`} >
-				{/* Header row for task list */}
-				<div className="scroll grid grid-cols-[repeat(13,_minmax(0,_1fr))] py-3 gap-y-0.5 text-gray-700 text-opacity-90 text-[15px]" >
-					<p className="col-span-1 text-center text-[14px]" >Hub</p> 
-					<p className="col-span-1 text-center text-[14px]" >Priority</p> 
-					<p className="col-span-6 text-[14px]" 			  >Name</p>
-					<p className="col-span-2 text-center text-[14px]" >Deadline</p>
-					<p className="col-span-2 text-center text-[14px]" >Active Time</p>
-					<p className="col-span-1 text-center text-[14px]" >Actions</p>
-				</div>
-
-				{/* Scrollable task list container */}
-				<div ref={containerRef} className="h-full scroll overflow-y-auto overflow-x-hidden" >
-					{searching ? mapTasks(searchItems) : mapTasks(taskItems)}
-				</div>
-
-				<TaskAddField currFolderId={currFolderId} setNewTask={setNewTask} />
+		<div className={`flex flex-col relative shadow justify-start bg-blue-100 transition-all ${showFolder ? "w-4/5" : "w-full"}`} >
+			{/* Header row for task list */}
+			<div className="scroll grid grid-cols-[repeat(13,_minmax(0,_1fr))] py-3 gap-y-0.5 text-gray-700 text-opacity-90 text-[15px]" >
+				<p className="col-span-1 text-center text-[14px]" >Hub</p> 
+				<p className="col-span-1 text-center text-[14px]" >Priority</p> 
+				<p className="col-span-6 text-[14px]" 			  >Name</p>
+				<p className="col-span-2 text-center text-[14px]" >Deadline</p>
+				<p className="col-span-2 text-center text-[14px]" >Active Time</p>
+				<p className="col-span-1 text-center text-[14px]" >Actions</p>
 			</div>
-		</>
+
+			{/* Scrollable task list container */}
+			<div ref={containerRef} className="h-full scroll overflow-y-auto overflow-x-hidden" >
+				{searching ? mapTasks(searchItems) : mapTasks(taskItems)}
+			</div>
+
+			<TaskAddField currFolderId={currFolderId} setNewTask={setNewTask} />
+		</div>
   	);
 };
 

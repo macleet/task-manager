@@ -106,7 +106,7 @@ export default ({taskId, name, dueDate, priority, notes, activeSeconds, tags, ed
     };
 
     return(
-        editTaskId === taskId && <div className={`flex justify-center items-center w-full bg-black bg-opacity-50 inset-0 z-[100] fixed transition-all duration-200`} >
+        editTaskId === taskId && <div className={`flex justify-center items-center w-full bg-black bg-opacity-50 inset-0 z-50 fixed transition-all duration-200`} >
             <div className="rounded-lg overflow-y-auto scroll w-1/3 h-5/6 flex flex-col p-6 gap-4 text-slate-900 text-opacity-95 from-blue-100 to-blue-50 bg-gradient-to-tl to-75%">
                 {/* Task header */}
                 <div className="flex justify-between" >
