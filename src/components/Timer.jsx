@@ -9,8 +9,10 @@ import PauseIcon from '@mui/icons-material/Pause';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import { SessionNode, SessionCircularList } from '../utilities/Session';
+import { useActiveTaskContext } from '../context/ActiveTaskContext';
 
 export default ({}) => {
+    const { activeTaskId } = useActiveTaskContext();
     const [currentSession, setCurrentSession] = useState(null);
     const [minutes, setMinutes] = useState(null);
     const [seconds, setSeconds] = useState(0);
@@ -37,9 +39,7 @@ export default ({}) => {
     useEffect(() => {
         if (paused) return;
 
-        if (minutes === 0 && seconds === 0) {
-            return;
-        }   
+        if (minutes === 0 && seconds === 0) return;
 
         if (seconds === -1 && minutes > 0) {
             setMinutes(minutes-1);
@@ -47,29 +47,36 @@ export default ({}) => {
         }
         
         if (seconds < 60) {
-            const timerId = setTimeout(() => setSeconds(seconds-1), 1000);
+            const timerId = setTimeout(() => setSeconds(seconds-1), 10);
             return () => clearTimeout(timerId);
         }
     }, [seconds, paused]);
 
     const handleTogglePause = async () => {
-        if (!paused) {
-            const elapsedMinutes = currentSession.duration - minutes;
-            switch (currentSession.type) {
-                case "work":
-                    // timeStats.workTime = timeStats.workTime + elapsedMinutes;
-                    // setTimeStats({...timeStats});
-                    break;
-                case "break":
-                case "longbreak":
-                    // timeStats.breakTime = timeStats.breakTime + elapsedMinutes;
-                    // setTimeStats({...timeStats});
-                    break;
-                default:
-                    console.error("Unknown session type.");
+        setPaused(!paused);
+
+        if (paused || activeTaskId < 0) return;
+
+        const elapsedMinutes = Math.round(((currentSession.duration - minutes) * 60 - seconds) / 60);
+        if (currentSession.type === "work") {
+            try {
+                await axios.patch("https://task-manager-server-6eht.onrender.com/times/setElapsedMinutes", {
+                    taskId: activeTaskId,
+                    elapsedTime: elapsedMinutes
+                });
+            } catch (error) {
+                console.error("Error sending patch request to set elapsed minutes", error);
+            }
+        } else {
+            try {
+                await axios.patch("https://task-manager-server-6eht.onrender.com/times/setRestedMinutes", {
+                    taskId: activeTaskId,
+                    elapsedTime: elapsedMinutes
+                });
+            } catch (error) {
+                console.error("Error sending patch request to set rested minutes", error);
             }
         }
-        setPaused(!paused);
     };
 
     const handleNext = () => {
@@ -111,6 +118,10 @@ export default ({}) => {
                 {currentSession !== null && currentSession.type === "break" && "Short break!"}
                 {currentSession !== null && currentSession.type === "longbreak" && "Long break!"}
             </span>
+
+            <div className={`${activeTaskId < 0 && "hidden"} w-full`} >
+                <p className="text-sm font-medium text-slate-600" >Current task</p>
+            </div>
         </div>
     );
 };
