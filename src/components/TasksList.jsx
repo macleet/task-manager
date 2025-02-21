@@ -8,6 +8,7 @@ import {
 import TaskItem from './TaskItem/TaskItem.jsx';
 import TaskAddField from './TaskAddField.jsx';
 import axios from 'axios';
+import { DurationProvider } from '../context/DurationContext.jsx';
 
 const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems, currFolderId}) => {
 	// Task list container ref
@@ -92,20 +93,21 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
 	// Map tasks to TaskItem components
 	const mapTasks = (items) => 
 		items.map((task) => 
-			task.taskId && <TaskItem 
-				key={task.taskId} 
-				taskId={task.taskId} 
-				name={task.name} 
-				dueDate={task.dueDate} 
-				priority={task.priority} 
-				notes={task.notes}
-				tags={task.tags}
-				editTaskId={editTaskId} 
-				setEditTaskId={setEditTaskId}
-				newTask={newTask} 
-				setTaskDeleted={setTaskDeleted}
-				parentBottom={bottom}
-			/>
+			task.taskId && <DurationProvider key={task.taskId} >
+				<TaskItem 
+					taskId={task.taskId} 
+					name={task.name} 
+					dueDate={task.dueDate} 
+					priority={task.priority} 
+					notes={task.notes}
+					tags={task.tags}
+					editTaskId={editTaskId} 
+					setEditTaskId={setEditTaskId}
+					newTask={newTask} 
+					setTaskDeleted={setTaskDeleted}
+					parentBottom={bottom}
+				/>
+			</DurationProvider>
 		);
 
 	return (

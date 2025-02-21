@@ -2,12 +2,14 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useActiveTaskContext } from "../../context/ActiveTaskContext";
 import { useTimerContext } from "../../context/TimerContext";
+import { useDurationContext } from "../../context/DurationContext";
 
 export default ({ taskId, editTaskId }) => {
     const { activeTaskId, setActiveTaskId } = useActiveTaskContext();
     const { paused } = useTimerContext();
+    const { activeTime, setActiveTime, setRestedTime } = useDurationContext();
     const [isActive, setIsActive] = useState(false);
-    const [activeTime, setActiveTime] = useState("");
+    // const [activeTime, setActiveTime] = useState("");
 
     const fetchActive = async () => {
         try {
@@ -37,6 +39,17 @@ export default ({ taskId, editTaskId }) => {
                 setActiveTime(response.data.durationText);
             } catch (error) {
                 console.error("Error fetching elapsed time", error);
+            }
+
+            try {
+                const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getRestedMinutes", {
+                    params: {
+                        taskId: taskId
+                    }
+                });
+                setRestedTime(response.data.durationText);
+            } catch (error) {
+                console.error("Error fetching rested time", error);
             }
         };
         initializeTime();
