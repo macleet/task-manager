@@ -6,7 +6,13 @@ class MyDate {
         this.day = day;
     }
 
-    totalDaysInMonth(offset=0) { return new Date(this.year, this.month + offset + 1, 0).getDate(); }
+    getDateObject() {
+        return new Date(this.year, this.month, this.date);
+    }
+
+    totalDaysInMonth(offset=0) {
+        return new Date(this.year, this.month + offset + 1, 0).getDate();
+    }
 }
 
 class WeekPeriod {
@@ -16,63 +22,56 @@ class WeekPeriod {
             this.end = end;
             return;
         }
- 
+
         const dateObj = new Date();
- 
         const year = dateObj.getFullYear();
         const month = dateObj.getMonth();
         const date = dateObj.getDate();
         const day = dateObj.getDay();
- 
-        this.start = new MyDate(year, month, date - day, 0);    // Set date to Sunday's date
-        this.end = new MyDate(year, month, date + (6 - day), 6);    // Set date to Saturday's date
- 
+
+        this.start = new MyDate(year, month, date - day, 0);
+        this.end = new MyDate(year, month, date + (6 - day), 6);
+
         this.checkCases();
     }
- 
-    checkCases() {
-        // Cases: 
-        //      Change month when current week crosses over to next/prev month
-        //      Change year when this happens during Jan and Dec, accordingly
-        switch (true) {
-            case this.start.date < 1:
-                if (this.start.month === 0) {
-                    this.start.year--;
-                    this.start.month = 11;  // Set to December
-                }
-                else this.start.month--;
-                this.start.date += this.start.totalDaysInMonth();
-                break;
-            case this.start.date >= 28 && this.start.date > this.start.totalDaysInMonth():
-                if (this.start.month === 11) {  // End date lands of next month
-                    this.start.year++;
-                    this.start.month = 0;  // Set to January
-                } 
-                else this.start.month++;
-                this.start.date -= this.start.totalDaysInMonth();
-                break;
+
+    getPeriodDatesArray() {
+        const datesArray = [];
+        const dateObj = this.start.getDateObject();
+
+        for (let i = 0; i < 7; i++) {
+            const tempDate = new Date(dateObj);
+            tempDate.setDate(dateObj.getDate() + i);
+            datesArray.push(tempDate);
         }
- 
-        switch (true) {
-            case this.end.date < 1:
-                if (this.end.month === 0) {
-                    this.end.year--;
-                    this.end.month = 11;  // Set to December
-                }
-                else this.end.month--;
-                this.end.date += this.end.totalDaysInMonth();
-                break;
-            case this.end.date >= 28 && this.end.date > this.end.totalDaysInMonth():
-                if (this.end.month === 11) {  // End date lands of next month
-                    this.end.year++;
-                    this.end.month = 0;  // Set to January
-                } 
-                else this.end.month++;
-                this.end.date -= this.end.totalDaysInMonth();
-                break;
-        }
+
+        console.log([...datesArray]);
     }
- 
+
+    checkCases() {
+        [this.start, this.end].forEach(dateObj => {
+            while (dateObj.date < 1) {
+                if (dateObj.month === 0) {
+                    dateObj.year--;
+                    dateObj.month = 11;
+                } else {
+                    dateObj.month--;
+                }
+                dateObj.date += dateObj.totalDaysInMonth();
+            }
+
+            while (dateObj.date > dateObj.totalDaysInMonth()) {
+                dateObj.date -= dateObj.totalDaysInMonth();
+                if (dateObj.month === 11) {
+                    dateObj.year++;
+                    dateObj.month = 0;
+                } else {
+                    dateObj.month++;
+                }
+            }
+        });
+    }
+
     nextPeriod(jumps=1) {
         for (let i = 0; i < jumps; i++) {
             this.start.date += 7;
@@ -80,7 +79,7 @@ class WeekPeriod {
             this.checkCases();
         }
     }
- 
+
     prevPeriod(jumps=1) {
         for (let i = 0; i < jumps; i++) {
             this.start.date -= 7;
