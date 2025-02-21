@@ -27,15 +27,10 @@ This web application is a task manager with which we can create task items and o
   - The due date box will change color as the due date approaches.
 
 ## Tech Stack
-This web application uses a React frontend styled with Tailwind CSS. It utilizes a Node.js Express backend with a PostgreSQL database connection. Used the Vite build tool for rapid and productive development.
+This web application features a React frontend styled with Tailwind CSS, enhanced by Material UI icons, and utilizes react-chartjs-2 for dynamic productivity tracking charts. It integrates OpenAI's LLM to intelligently generate subtasks, streamlining task management.
 
-## Installation and Setup
-### Prerequisites
-- Node.js
-- npm 
-
-### Steps
+The backend is built with Node.js and Express, connected to a PostgreSQL database. Development is powered by Vite for a fast and efficient build process. The entire stack is containerized with Docker and deployed on Render.com, covering the frontend, backend, and database for seamless scalability and performance.
 
 ## Usage
-
-## Architecture
+[Live demo](https://task-manager-front-bmmt.onrender.com/)
+Note: Due to deployment on Render.com with free tier, you may experience initial delays due to automatic spin-down when idle.
