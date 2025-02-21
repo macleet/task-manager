@@ -31,7 +31,7 @@ timesRouter.get("/getRestedMinutes", async (req, res) => {
         const { rested_minutes: restedMinutes, active } = results.rows[0];
         res.json({ restedMinutes, active });
     } catch (error) {
-        console.error("Error getting elapsed time for task", error);
+        console.error("Error getting rested time for task", error);
     }
 });
 
