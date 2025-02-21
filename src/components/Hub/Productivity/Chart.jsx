@@ -10,7 +10,8 @@ import {
     Title, 
     Tooltip, 
     Legend 
- } from 'chart.js';
+} from 'chart.js';
+import axios from "axios";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
