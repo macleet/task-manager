@@ -61,7 +61,7 @@ export default ({ taskId, editTaskId }) => {
     };
 
     return (
-        <div className={`h-16 col-span-2 flex justify-center items-center gap-2 text-black bg-opacity-40 transition-all ${editTaskId === taskId ? "bg-blue-400" : "bg-white"}`}>
+        <div className={`h-16 col-span-2 flex flex-col justify-center items-center gap-0.5 text-black bg-opacity-40 transition-all ${editTaskId === taskId ? "bg-blue-400" : "bg-white"}`}>
             <p>{activeTime}</p>
             <input checked={isActive} title="Set active task" onChange={toggleActiveTask} type="checkbox" />
         </div>
