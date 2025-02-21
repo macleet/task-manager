@@ -22,23 +22,23 @@ export default ({ taskId }) => {
         work: [5, 3, 3, 4, 5, 8, 1],
     });
 
-    const data = {
+    const [chartData, setChartData] = useState({
         labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
         datasets: [
-           {
-              label: 'Rested',
-              data: weekData.rest,
-              backgroundColor: '#547bc9',
-              borderRadius: 2,
-           },
-           {
-              label: 'Worked',
-              data: weekData.work,
-              backgroundColor: 'rgb(204, 162, 126)',
-              borderRadius: 2,
-           },
+            {
+                label: 'Rested',
+                data: weekData.rest,
+                backgroundColor: '#547bc9',
+                borderRadius: 2,
+            },
+            {
+                label: 'Worked',
+                data: weekData.work,
+                backgroundColor: 'rgb(204, 162, 126)',
+                borderRadius: 2,
+            },
         ],
-    };
+    });
 
     const options = {
         responsive: true,
@@ -115,8 +115,8 @@ export default ({ taskId }) => {
                 });
                 const { activeData, restData } = response.data;
                 setWeekData({
-                    rest: activeData, 
-                    work: restData
+                    rest: restData, 
+                    work: activeData
                 });
             } catch (error) {
                console.error("GET request error for retrieving graph data", error);
@@ -129,7 +129,7 @@ export default ({ taskId }) => {
         <div className="flex flex-col bg-blue-200 bg-opacity-40 rounded-xl w-1/2 shadow-sm" >
             <div className="h-[280px]">
                 <Bar
-                    data={data}
+                    data={chartData}
                     options={options}
                 />
             </div>
