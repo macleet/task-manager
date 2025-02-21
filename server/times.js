@@ -1,5 +1,5 @@
 import pool from "./db.js";
-import { Router } from "express";
+import e, { Router } from "express";
 import { convertTimeDuration } from "./utilities.js";
 const timesRouter = Router();
 
@@ -50,11 +50,17 @@ timesRouter.patch("/setActive", async (req, res) => {
 });
 
 timesRouter.patch("/setElapsedMinutes", async (req, res) => {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);  // Set time to midnight
     try {
         const { taskId, elapsedTime } = req.body;
-        const result = await pool.query("SELECT elapsed_minutes FROM times WHERE task_id = $1", [taskId]);
-        const { elapsed_minutes: currentMinutes } = result.rows[0];
-        await pool.query("UPDATE times SET elapsed_minutes = $1 WHERE task_id = $2", [elapsedTime + currentMinutes, taskId]);
+        const result = await pool.query("SELECT elapsed_minutes, date FROM times WHERE task_id = $1", [taskId]);
+        const { elapsed_minutes: currentMinutes, date } = result.rows[0];
+        if (date !== currentDate) {
+            await pool.query("INSERT INTO times (task_id, date, elapsed_time) VALUES ($1, $2, $3)", [taskId, currentDate, elapsedTime]);
+        } else {
+            await pool.query("UPDATE times SET elapsed_minutes = $1 WHERE task_id = $2 AND date = $3", [elapsedTime + currentMinutes, taskId, date]);
+        }
         res.json();
     } catch (error) {
         console.error("Error setting elapsed minutes", error);
@@ -62,11 +68,17 @@ timesRouter.patch("/setElapsedMinutes", async (req, res) => {
 });
 
 timesRouter.patch("/setRestedMinutes", async (req, res) => {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);  // Set time to midnight
     try {
         const { taskId, elapsedTime } = req.body;
-        const result = await pool.query("SELECT rested_minutes FROM times WHERE task_id = $1", [taskId]);
-        const { rested_minutes: currentMinutes } = result.rows[0];
-        await pool.query("UPDATE times SET rested_minutes = $1 WHERE task_id = $2", [elapsedTime + currentMinutes, taskId]);
+        const result = await pool.query("SELECT rested_minutes, date FROM times WHERE task_id = $1", [taskId]);
+        const { rested_minutes: currentMinutes, date } = result.rows[0];
+        if (date !== currentDate) {
+            await pool.query("INSERT INTO times (task_id, date, rested_time) VALUES ($1, $2, $3)", [taskId, currentDate, elapsedTime]);
+        } else {
+            await pool.query("UPDATE times SET rested_minutes = $1 WHERE task_id = $2 AND date = $3", [elapsedTime + currentMinutes, taskId, date]);
+        }
         res.json();
     } catch (error) {
         console.error("Error setting rested minutes", error);
@@ -87,6 +99,22 @@ timesRouter.get("/getActiveTask", async (req, res) => {
         res.json({ folderName, taskName });
     } catch (error) {
         console.error("Error getting active task info", error);
+    }
+});
+
+timesRouter.get("/getChartData", async (req, res) => {
+    const activeData = [], restData = [];
+    const { taskId, periodDates } = req.query;
+    try {
+        for (const date of periodDates) {
+            const result = await pool.query("SELECT elapsed_minutes, rested_minutes FROM times WHERE task_id = $1 AND date = $2", [taskId, date]);
+            const { elapsed_minutes: elapsedMinutes, rested_minutes: restedMinutes } = result.rows[0];
+            activeData.push(elapsedMinutes / 60);  // Push hours
+            restData.push(restedMinutes / 60);  // Push hours
+        }
+        res.json({ activeData, restData });
+    } catch (error) {
+        console.error("Error getting chart data", error);
     }
 });
 
