@@ -24,29 +24,42 @@ export default ({}) => {
     const {paused, setPaused} = useTimerContext();
 
     useEffect(() => {
-        
+        if (currentSession) return;
+
+        const sessionQueue = new SessionCircularList();
+        const workSession = new SessionNode("work", 30);
+        const breakSession = new SessionNode("break", 10);
+        const longBreakSession = new SessionNode("longbreak", 25);
+
+        sessionQueue.append(workSession);
+        sessionQueue.append(breakSession);
+        sessionQueue.append(workSession);
+        sessionQueue.append(longBreakSession);
+
+        setCurrentSession(sessionQueue.head);
+        setMinutes(sessionQueue.head.duration);
+    }, []);
+
+    useEffect(() => {
         if (activeTaskId > 0) {
             const getActiveTask = async () => {
-                const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getActiveTask");
-                const { taskName, folderName } = response.data;
-                setActiveTask({ taskName, folderName });
+                try {
+                    console.log(activeTaskId);
+                    const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getActiveTask", {
+                        params: {
+                            taskId: activeTaskId
+                        }
+                    });
+                    const { taskName, folderName } = response.data;
+                    console.log(taskName, folderName);
+                    setActiveTask({ taskName, folderName });
+                } catch (error) {
+                    console.error("Error retrieving (GET) active task info", error);
+                }
             };
             getActiveTask();
-        } else if (!currentSession) {
-            const sessionQueue = new SessionCircularList();
-            const workSession = new SessionNode("work", 30);
-            const breakSession = new SessionNode("break", 10);
-            const longBreakSession = new SessionNode("longbreak", 25);
-    
-            sessionQueue.append(workSession);
-            sessionQueue.append(breakSession);
-            sessionQueue.append(workSession);
-            sessionQueue.append(longBreakSession);
-    
-            setCurrentSession(sessionQueue.head);
-            setMinutes(sessionQueue.head.duration);
         }
-    }, []);
+    }, [activeTaskId]);
 
     useEffect(() => {
         if (paused) return;
