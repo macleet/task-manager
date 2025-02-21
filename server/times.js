@@ -107,6 +107,8 @@ timesRouter.get("/getActiveTask", async (req, res) => {
 timesRouter.get("/getChartData", async (req, res) => {
     const activeData = [], restData = [];
     const { taskId, periodDates } = req.query;
+    console.log(periodDates)
+    console.log(typeof periodDates[0])
     try {
         for (const date of periodDates) {
             const formattedDate = date.toISOString().split('T')[0];
