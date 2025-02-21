@@ -24,8 +24,6 @@ export default ({}) => {
     const {paused, setPaused} = useTimerContext();
 
     useEffect(() => {
-        if (currentSession) return;
-
         const sessionQueue = new SessionCircularList();
         const workSession = new SessionNode("work", 30);
         const breakSession = new SessionNode("break", 10);
@@ -38,7 +36,8 @@ export default ({}) => {
 
         setCurrentSession(sessionQueue.head);
         setMinutes(sessionQueue.head.duration);
-    }, []);
+        setSeconds(0);
+    }, [activeTaskId]);
 
     useEffect(() => {
         if (activeTaskId > 0) {
