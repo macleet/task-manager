@@ -129,6 +129,7 @@ export default ({ taskId }) => {
         <div className="flex flex-col bg-blue-200 bg-opacity-40 rounded-xl w-1/2 shadow-sm" >
             <div className="h-[280px]">
                 <Bar
+                    redraw={true}
                     data={chartData}
                     options={options}
                 />
