@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS tasks (
     priority INTEGER DEFAULT 1,
     folder_id INTEGER,
     notes VARCHAR(500) DEFAULT '',
-    active_seconds INTEGER DEFAULT 0,
     tags VARCHAR(20)[] DEFAULT '{}'::VARCHAR[]
 );
 
