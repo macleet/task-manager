@@ -4,8 +4,8 @@ A feature-rich productivity app designed to help you manage tasks, boost efficie
 
 ## Table of Contents
 - [Key Features](#key-features)
-- [Tech Stack](#tech-stack)
 - [Usage](#usage)
+- [Tech Stack](#tech-stack)
 
 ## Usage
 [Live demo](https://task-manager-front-bmmt.onrender.com/)
