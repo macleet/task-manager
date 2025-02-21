@@ -60,7 +60,10 @@ export default ({}) => {
 
     useEffect(() => {
         if (paused) return;
-        if (minutes === 0 && seconds === 0) return;
+        if (minutes === 0 && seconds === 0) {
+            setPaused(true);
+            return;
+        }
         if (seconds === -1 && minutes > 0) {
             setMinutes(minutes-1);
             setSeconds(59);
