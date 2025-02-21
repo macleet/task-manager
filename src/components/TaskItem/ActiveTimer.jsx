@@ -29,8 +29,8 @@ export default ({ taskId, editTaskId }) => {
                         taskId: taskId
                     }
                 });
-                console.log(response.data.active)
-                // if (response.data.active) setActiveTaskId(taskId);
+                console.log(response.data.active);
+                if (response.data.active) setActiveTaskId(taskId);
                 setActiveTime(response.data.elapsedMinutes);
             } catch (error) {
                 console.error("Error fetching elapsed time", error);
