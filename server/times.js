@@ -68,7 +68,7 @@ timesRouter.get("/getActiveTask", async (req, res) => {
             JOIN folders ON tasks.folder_id = folders.folder_id
             WHERE tasks.task_id = $1;
         `;
-        const result = pool.query(query, [taskId]);
+        const result = await pool.query(query, [taskId]);
         const { folder_name: folderName, task_name: taskName } = result.rows[0];
         res.json({ folderName, taskName });
     } catch (error) {
