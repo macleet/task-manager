@@ -111,9 +111,11 @@ timesRouter.get("/getChartData", async (req, res) => {
         for (const date of periodDates) {
             const formattedDate = date.split('T')[0];
             const result = await pool.query("SELECT elapsed_minutes, rested_minutes FROM times WHERE task_id = $1 AND date = $2", [taskId, formattedDate]);
-            const { elapsed_minutes: elapsedMinutes, rested_minutes: restedMinutes } = result.rows[0];
-            activeData.push(elapsedMinutes / 60);  // Push hours
-            restData.push(restedMinutes / 60);  // Push hours
+            
+            const { elapsed_minutes: elapsedMinutes = 0, rested_minutes: restedMinutes = 0 } = result.rows[0] || {};
+            const toHours = (minutes) => minutes / 60;
+            activeData.push(toHours(elapsedMinutes));
+            restData.push(toHours(restedMinutes));
         }
         res.json({ activeData, restData });
     } catch (error) {
