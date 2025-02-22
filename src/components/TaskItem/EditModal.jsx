@@ -76,8 +76,7 @@ export default ({taskId, name, dueDate, priority, notes, activeSeconds, tags, ed
         });
     };
 
-    // Name display / input handlers
-    const handleInputDblClick = () => setEdit(true);
+    // Name input handler
     const handleInputChange = (event) => {
         if (!edit) return;
         setTaskDetails({...taskDetails, name: event.target.value});
@@ -114,7 +113,6 @@ export default ({taskId, name, dueDate, priority, notes, activeSeconds, tags, ed
                     <div className="flex flex-col justify-center gap-1 w-full max-w-[50%]" >
                         <input 
                             ref={nameRef} 
-                            onDoubleClick={handleInputDblClick} 
                             readOnly={!edit} 
                             onChange={handleInputChange} 
                             className={`flex items-center font-medium p-1 px-2 rounded transition-all text-sm bg-inherit -ml-2 ${edit ? "bg-white" : "outline-none"}`} 
