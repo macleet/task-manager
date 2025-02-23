@@ -23,8 +23,8 @@ export default ({}) => {
     const [seconds, setSeconds] = useState(0);
     const {paused, setPaused} = useTimerContext();
     const [pausedTime, setPausedTime] = useState({
-        minutes: minutes,
-        seconds, seconds
+        minutes: 0,
+        seconds: 0
     });
 
     useEffect(() => {
