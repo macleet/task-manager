@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import EditModal from './EditModal.jsx';
+import EditModal from './EditModal/EditModal.jsx';
 import ActionButton from './ActionButton.jsx';
 import ActiveTimer from './ActiveTimer.jsx';
 import DueDate from './DueDate.jsx';
