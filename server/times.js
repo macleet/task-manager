@@ -32,7 +32,7 @@ timesRouter.get("/getRestedMinutes", async (req, res) => {
         const results = await pool.query("SELECT rested_minutes FROM times WHERE task_id = $1", [taskId]);
         const totalMinutes = results.rows.reduce((acc, row) => acc + row.rested_minutes, 0);
         const durationText = convertTimeDuration(totalMinutes);
-        res.json({ durationText, active });
+        res.json({ durationText });
     } catch (error) {
         console.error("Error getting rested time for task", error);
     }
