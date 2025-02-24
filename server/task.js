@@ -82,11 +82,20 @@ taskRouter.patch("/priority", async (req, res) => {
 // Update a task name
 taskRouter.put("/update/:id", async (req, res) => {
     try {
-        const newText = req.body["new_name"];
+        const { newText } = req.body;
         const result = await pool.query("UPDATE tasks SET name = $1 WHERE task_id = $2 RETURNING *", [newText, req.params.id]);
         res.json(result.rows);
     } catch (err) {
         console.error("Error updating task name", err.message);
+    }
+});
+
+taskRouter.get("/dueDate/:id", async (req, res) => {
+    try {
+        const results = await pool.query("SELECT due_date FROM tasks WHERE task_id = $1", [req.params.id]);
+        res.json(results.rows);
+    } catch (err) {
+        console.error(err.message);
     }
 });
 
@@ -101,21 +110,12 @@ taskRouter.put("/move/:id", async (req, res) => {
     }
 });
 
-taskRouter.get("/dueDate/:id", async (req, res) => {
-    try {
-        const results = await pool.query("SELECT due_date FROM tasks WHERE task_id = $1", [req.params.id]);
-        res.json(results.rows);
-    } catch (err) {
-        console.error(err.message);
-    }
-});
-
 // Change due date
 taskRouter.patch("/dateChange/:id", async (req, res) => {
     try {
-        const newDate = req.body["new_date"];
-        const result = await pool.query("UPDATE tasks SET due_date = $1 WHERE task_id = $2 RETURNING *", [newDate, req.params.id]);
-        res.json(result.rows);
+        const { newDate } = req.body;
+        await pool.query("UPDATE tasks SET due_date = $1 WHERE task_id = $2 RETURNING *", [newDate, req.params.id]);
+        res.json();
     } catch (err) {
         console.error(err.message);
     }
@@ -125,8 +125,19 @@ taskRouter.patch("/dateChange/:id", async (req, res) => {
 taskRouter.patch("/nameChange/:id", async (req, res) => {
     try {
         const { newName } = req.body;
-        const result = await pool.query("UPDATE tasks SET name = $1 WHERE task_id = $2 RETURNING *", [newName, req.params.id]);
-        res.json(result.rows);
+        await pool.query("UPDATE tasks SET name = $1 WHERE task_id = $2 RETURNING *", [newName, req.params.id]);
+        res.json();
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+// Change notes
+taskRouter.patch("/notesChange", async (req, res) => {
+    try {
+        const { taskId, notes } = req.body;
+        await pool.query("UPDATE tasks SET notes = $1 WHERE task_id = $2", [notes, taskId]);
+        res.json();
     } catch (err) {
         console.error(err.message);
     }
