@@ -17,10 +17,10 @@ timesRouter.get("/getActive", async (req, res) => {
 timesRouter.get("/getElapsedMinutes", async (req, res) => {
     try {
         const { taskId } = req.query;
-        const results = await pool.query("SELECT elapsed_minutes, active FROM times WHERE task_id = $1", [taskId]);
-        const { elapsed_minutes: elapsedMinutes, active } = results.rows[0];
-        const durationText = convertTimeDuration(elapsedMinutes);
-        res.json({ durationText, active });
+        const results = await pool.query("SELECT elapsed_minutes FROM times WHERE task_id = $1", [taskId]);
+        const totalMinutes = results.rows.reduce((acc, row) => acc + row.elapsed_minutes, 0);
+        const durationText = convertTimeDuration(totalMinutes);
+        res.json({ durationText });
     } catch (error) {
         console.error("Error getting elapsed time for task", error);
     }
@@ -29,9 +29,9 @@ timesRouter.get("/getElapsedMinutes", async (req, res) => {
 timesRouter.get("/getRestedMinutes", async (req, res) => {
     try {
         const { taskId } = req.query;
-        const results = await pool.query("SELECT rested_minutes, active FROM times WHERE task_id = $1", [taskId]);
-        const { rested_minutes: restedMinutes, active } = results.rows[0];
-        const durationText = convertTimeDuration(restedMinutes);
+        const results = await pool.query("SELECT rested_minutes FROM times WHERE task_id = $1", [taskId]);
+        const totalMinutes = results.rows.reduce((acc, row) => acc + row.rested_minutes, 0);
+        const durationText = convertTimeDuration(totalMinutes);
         res.json({ durationText, active });
     } catch (error) {
         console.error("Error getting rested time for task", error);
