@@ -59,7 +59,7 @@ timesRouter.patch("/setElapsedMinutes", async (req, res) => {
             res.json();
         }
         const { elapsed_minutes: currentMinutes } = result.rows[0];
-        await pool.query("UPDATE times SET elapsed_minutes = $1 WHERE task_id = $2 AND date = $3", [elapsedTime + currentMinutes, taskId, date]);
+        await pool.query("UPDATE times SET elapsed_minutes = $1 WHERE task_id = $2 AND date = $3", [elapsedTime + currentMinutes, taskId, currentDate]);
         res.json();
     } catch (error) {
         console.error("Error setting elapsed minutes", error);
@@ -76,7 +76,7 @@ timesRouter.patch("/setRestedMinutes", async (req, res) => {
             res.json();
         }
         const { rested_minutes: currentMinutes } = result.rows[0];
-        await pool.query("UPDATE times SET rested_minutes = $1 WHERE task_id = $2 AND date = $3", [elapsedTime + currentMinutes, taskId, date]);
+        await pool.query("UPDATE times SET rested_minutes = $1 WHERE task_id = $2 AND date = $3", [elapsedTime + currentMinutes, taskId, currentDate]);
         res.json();
     } catch (error) {
         console.error("Error setting rested minutes", error);
