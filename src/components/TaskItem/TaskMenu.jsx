@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import axios from "axios";
+import { deleteTask } from '../../utilities/api';
 
 const TaskMenu = ({taskId, editTaskId, setEditTaskId, hover, setDeleted, containerBottom}) => {
     const menuContainerRef = useRef(null);
@@ -14,14 +14,8 @@ const TaskMenu = ({taskId, editTaskId, setEditTaskId, hover, setDeleted, contain
     const handleEditClick = () => setEditTaskId(editTaskId === taskId ? -editTaskId : taskId);
     
     const handleDeleteClick = async () => {
-        try {
-            await axios.delete("https://task-manager-server-6eht.onrender.com/task/delete", {
-                data: { id: taskId }
-            });
-            setDeleted(prev => !prev);
-        } catch(error) {
-            console.error(`Error deleting task ${taskId}`, error);
-        }
+        await deleteTask(taskId);
+        setDeleted(prev => !prev);
     };
 
     return (

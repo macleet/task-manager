@@ -2,7 +2,6 @@ import {
     useState,
     useEffect,
 } from 'react'
-import axios from 'axios';
 
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -11,6 +10,7 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import { SessionNode, SessionCircularList } from '../utilities/Session';
 import { useActiveTaskContext } from '../context/ActiveTaskContext';
 import { useTimerContext } from '../context/TimerContext';
+import { getActiveTask, setElapsedMinutes, setRestedMinutes } from '../utilities/api';
 
 export default ({}) => {
     const { activeTaskId } = useActiveTaskContext();
@@ -28,6 +28,14 @@ export default ({}) => {
     });
 
     useEffect(() => {
+        const getActiveTaskFromApi = async () => {
+            if (activeTaskId > 0) {
+                const { taskName, folderName } = await getActiveTask(activeTaskId);
+                setActiveTask({ taskName, folderName });
+            }
+        }
+        getActiveTaskFromApi();
+
         const sessionQueue = new SessionCircularList();
         const workSession = new SessionNode("work", 30);
         const breakSession = new SessionNode("break", 10);
@@ -48,25 +56,6 @@ export default ({}) => {
     }, [activeTaskId]);
 
     useEffect(() => {
-        if (activeTaskId > 0) {
-            const getActiveTask = async () => {
-                try {
-                    const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getActiveTask", {
-                        params: {
-                            taskId: activeTaskId
-                        }
-                    });
-                    const { taskName, folderName } = response.data;
-                    setActiveTask({ taskName, folderName });
-                } catch (error) {
-                    console.error("Error retrieving (GET) active task info", error);
-                }
-            };
-            getActiveTask();
-        }
-    }, [activeTaskId]);
-
-    useEffect(() => {
         if (paused) return;
         if (minutes === 0 && seconds === 0) {
             setPaused(true);
@@ -77,12 +66,10 @@ export default ({}) => {
             setSeconds(59);
         }
         if (seconds < 60) {
-            const timerId = setTimeout(() => setSeconds(seconds-1), 1000);
+            const timerId = setTimeout(() => setSeconds(seconds-1), 1);
             return () => clearTimeout(timerId);
         }
     }, [seconds, paused]);
-
-    
 
     const handleTogglePause = async () => {
         setPaused(!paused);
@@ -90,30 +77,12 @@ export default ({}) => {
         if (paused || activeTaskId < 0) return;
 
         const elapsedMinutes = Math.round(((pausedTime.minutes - minutes) * 60 - (pausedTime.seconds - seconds)) / 60);
-        console.log(elapsedMinutes)
         setPausedTime({
             minutes: minutes,
             seconds: seconds
         });
-        if (currentSession.type === "work") {
-            try {
-                await axios.patch("https://task-manager-server-6eht.onrender.com/times/setElapsedMinutes", {
-                    taskId: activeTaskId,
-                    elapsedTime: elapsedMinutes
-                });
-            } catch (error) {
-                console.error("Error sending patch request to set elapsed minutes", error);
-            }
-        } else {
-            try {
-                await axios.patch("https://task-manager-server-6eht.onrender.com/times/setRestedMinutes", {
-                    taskId: activeTaskId,
-                    elapsedTime: elapsedMinutes
-                });
-            } catch (error) {
-                console.error("Error sending patch request to set rested minutes", error);
-            }
-        }
+        if (currentSession.type === "work") await setElapsedMinutes(activeTaskId, elapsedMinutes);
+        else await setRestedMinutes(activeTaskId, elapsedMinutes);
     };
 
     const handleNext = () => {

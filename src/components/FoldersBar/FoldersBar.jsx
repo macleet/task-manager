@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import FolderItem from './FolderItem';
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
-import axios from 'axios';
+import { addNewFolder, getAllFolders } from '../../utilities/api';
 
 const FoldersBar = ({ setCurrHeader, currFolderId, setCurrFolderId, showFolder, setShowFolder }) => {
     const [folderItems, setFolderItems] = useState([]);
@@ -13,15 +13,11 @@ const FoldersBar = ({ setCurrHeader, currFolderId, setCurrFolderId, showFolder, 
 
     // Fetch folder items from the server
     useEffect(() => {
-        const getFolders = async () => {
-            try {
-                const response = await axios.get('https://task-manager-server-6eht.onrender.com/folder/');
-                setFolderItems(response.data);
-            } catch (error) {
-                console.error("Error fetching folders", error);
-            }
+        const getFoldersFromApi = async () => {
+            const folders = await getAllFolders();
+            setFolderItems(folders);
         };
-        getFolders();
+        getFoldersFromApi();
     }, [modified]);
 
     // Handle adding new folder
@@ -31,19 +27,8 @@ const FoldersBar = ({ setCurrHeader, currFolderId, setCurrFolderId, showFolder, 
     useEffect(() => {
         if (addFolder) {
             inputRef.current?.focus();
-            // add folderid to addedFolderId
         }
     }, [addFolder]);
-
-    // Submit the new folder to the server
-    const addNewFolder = async (name) => {
-        try {
-            const response = await axios.post(`https://task-manager-server-6eht.onrender.com/folder/add/${name}`);
-            return response.data; // Assuming the server returns the new folder ID
-        } catch (error) {
-            console.error("Error adding new folder", error);
-        }
-    };
 
     // Handle form submission for new folder
     const handleSubmit = async () => {
@@ -51,8 +36,8 @@ const FoldersBar = ({ setCurrHeader, currFolderId, setCurrFolderId, showFolder, 
             setAddFolder(false);
             return;
         }
-        const fid = await addNewFolder(inputRef.current.value);
-        setCurrFolderId(fid);
+        const folderId = await addNewFolder(inputRef.current.value);
+        setCurrFolderId(folderId);
         setCurrHeader(inputRef.current.value);
         setModified(!modified);
         setAddFolder(false);

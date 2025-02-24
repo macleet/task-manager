@@ -8,46 +8,35 @@ import {
     useState
 } from 'react';
 
-import axios from 'axios';
-
 const ControlBar = ({ setShowFolder, setSearchItems, searching, setSearching, currHeader }) => {
     const inputRef = useRef(null);
     const [timerIsOpen, setTimerIsOpen] = useState(false);
 
     // Handle the input key press events
-    const handleInputSubmit = (event) => {
+    const handleInputSubmit = async (event) => {
         if (event.key === "Escape") {
             setSearching(false); // Stop searching on Escape
             inputRef?.current.blur(); // Remove focus from the input field
             return;
         }
+
         if (inputRef?.current.value === "") {
             setSearchItems([]); // Clear search items if input is empty
             return;
         }
 
-        // Function to fetch search results from the server
-        const getSearchRes = async () => {
-            try {
-                const response = await axios.get('https://task-manager-server-6eht.onrender.com/task/search', {
-                    params: { search_query: inputRef?.current.value }, // Send search query to the server
-                });
-                const taskItems = response.data.map((task) => ({
-					taskId: task.task_id,
-					name: task.name,
-					dueDate: task.due_date ? task.due_date.split("T")[0].replaceAll("-", "/") : null,
-					priority: task.priority,
-					folderId: task.folder_id,
-					notes: task.notes,
-					activeSeconds: task.active_seconds,
-					tags: task.tags,
-				}));
-                setSearchItems(taskItems); // Update search results in state
-            } catch (err) {
-                console.error(err.message); // Handle errors
-            }
-        };
-        getSearchRes(); // Call the search API
+        const searchedTasks = await getSearchRes(inputRef?.current.value); // Call the search API
+        const taskItems = searchedTasks.map((task) => ({
+            taskId: task.task_id,
+            name: task.name,
+            dueDate: task.due_date ? task.due_date.split("T")[0].replaceAll("-", "/") : null,
+            priority: task.priority,
+            folderId: task.folder_id,
+            notes: task.notes,
+            activeSeconds: task.active_seconds,
+            tags: task.tags,
+        }));
+        setSearchItems(taskItems); // Update search results in state
     };
 
     // Handle input focus (set searching state to true)

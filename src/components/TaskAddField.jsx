@@ -1,28 +1,13 @@
-import axios from 'axios';
-
 const TaskAddField = ({ currFolderId, setNewTask }) => {
     // Handle the Enter key press to add a new task
-    const handleEnter = (event) => {
+    const handleEnter = async (event) => {
         // Only trigger if the key pressed is 'Enter' and the input is not empty
         if (event.key !== 'Enter' || event.target.value === '') return;
-        
-        // Function to post the new task to the backend
-        const postTask = async (name) => {
-            try {
-                // Send a POST request to add the task
-                await axios.post('https://task-manager-server-6eht.onrender.com/task/add', {
-                    name: name,
-                    folderId: currFolderId, // Associate task with the current folder
-                });
-                // Update the state to add the new task locally
-                setNewTask((prev) => ({ ...prev, name: name, folderId: currFolderId }));
-            } catch (err) {
-                console.error("Error adding new task", err.message);
-            }
-        };
 
         // Call the postTask function with the value entered in the input field
-        postTask(event.target.value);
+        await postTask(event.target.value, currFolderId);
+        setNewTask((prev) => ({ ...prev, name: event.target.value, folderId: currFolderId }));
+
         // Clear the input field after submitting the task
         event.target.value = "";
     }

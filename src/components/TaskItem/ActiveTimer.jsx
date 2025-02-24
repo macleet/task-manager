@@ -1,76 +1,47 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { useActiveTaskContext } from "../../context/ActiveTaskContext";
 import { useTimerContext } from "../../context/TimerContext";
 import { useDurationContext } from "../../context/DurationContext";
+import { getActiveDurationText, getIsActive, getRestedDurationText, patchIsActive } from "../../utilities/api";
 
 export default ({ taskId, editTaskId }) => {
     const { activeTaskId, setActiveTaskId } = useActiveTaskContext();
     const { paused } = useTimerContext();
     const { activeTime, setActiveTime, setRestedTime } = useDurationContext();
     const [isActive, setIsActive] = useState(false);
-    // const [activeTime, setActiveTime] = useState("");
-
-    const fetchActive = async () => {
-        try {
-            const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getActive", {
-                params: {
-                    taskId: taskId
-                }
-            });
-            setIsActive(response.data.active);
-        } catch (error) {
-            console.error("Error fetching current active task", error);
-        }
-    };
 
     useEffect(() => {
         if (!paused) return; // Update elapsed time only when paused
 
         const initializeTime = async () => {
-            try {
-                await fetchActive();
-                const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getElapsedMinutes", {
-                    params: {
-                        taskId: taskId
-                    }
-                });
-                if (response.data.active) setActiveTaskId(taskId);
-                setActiveTime(response.data.durationText);
-            } catch (error) {
-                console.error("Error fetching elapsed time", error);
-            }
+            const active = await getIsActive(taskId);
+            setIsActive(active);
+            if (active) setActiveTaskId(taskId);
 
-            try {
-                const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getRestedMinutes", {
-                    params: {
-                        taskId: taskId
-                    }
-                });
-                setRestedTime(response.data.durationText);
-            } catch (error) {
-                console.error("Error fetching rested time", error);
-            }
+            const activeDurationText = await getActiveDurationText(taskId);
+            setActiveTime(activeDurationText);
+
+            const restedDurationText = await getRestedDurationText(taskId);
+            setRestedTime(restedDurationText);
         };
         initializeTime();
     }, [paused]);
 
     useEffect(() => {
-        fetchActive();
+        const getIsActiveFromApi = async () => {
+            const active = await getIsActive(taskId);
+            setIsActive(active);
+        };
+        getIsActiveFromApi();
     }, [activeTaskId]);
 
     const toggleActiveTask = async (event) => {
         const isChecked = event.target.checked;
-        try {
-            await axios.patch("https://task-manager-server-6eht.onrender.com/times/setActive", {
-                taskId: taskId,
-                isActive: isChecked
-            });
-            await fetchActive();
-            setActiveTaskId(isChecked ? taskId : -1);
-        } catch (error) {
-            console.error("Error toggling active task", error);
-        }
+        await patchIsActive(taskId, isChecked);
+        
+        const active = await getIsActive(taskId);
+        setIsActive(active);
+        setActiveTaskId(isChecked ? taskId : -1);
     };
 
     return (

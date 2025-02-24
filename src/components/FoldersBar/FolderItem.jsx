@@ -1,8 +1,7 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-
-import axios from "axios";
 import { useState, useRef, useEffect } from 'react';
+import { changeFolderName, deleteFolder } from '../../utilities/api';
 
 const FolderItem = ({
     editingId, setEditingId, addFolder, setCurrHeader, setModified, setFolderItems,
@@ -16,11 +15,7 @@ const FolderItem = ({
 
     // Edit folder name
     const editFolder = async () => {
-        try {
-            await axios.patch(`https://task-manager-server-6eht.onrender.com/folder/change/${folderId}`, { name: inputRef?.current.value });
-        } catch (err) {
-            console.error(err.message);
-        }
+        await changeFolderName(folderId, inputRef?.current.value);
 
         // Update local folder items
         setFolderItems((prevItems) => prevItems.map(({ folder_id, name }) => {
@@ -35,15 +30,11 @@ const FolderItem = ({
     };
 
     // Delete folder
-    const deleteFolder = async () => {
-        try {
-            await axios.delete(`https://task-manager-server-6eht.onrender.com/folder/delete/${folderId}`);
-            setModified((prev) => !prev);
-            setCurrFolderId(1);
-            setCurrHeader("Main");
-        } catch (err) {
-            console.error(err.message);
-        }
+    const handleFolderDelete = async () => {
+        await deleteFolder(folderId);
+        setModified((prev) => !prev);
+        setCurrFolderId(1);
+        setCurrHeader("Main");
     };
 
     // Handle folder selection
@@ -132,7 +123,7 @@ const FolderItem = ({
                 </button>
                 <button
                     disabled={addFolder || (editingId > 0 && editingId !== folderId)}
-                    onClick={deleteFolder}
+                    onClick={handleFolderDelete}
                     className="flex p-1 text-slate-500 text-opacity-60 hover:text-opacity-95 transition-all"
                 >
                     <DeleteIcon fontSize="small" />

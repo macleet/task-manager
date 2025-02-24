@@ -9,6 +9,7 @@ import TaskItem from './TaskItem/TaskItem.jsx';
 import TaskAddField from './TaskAddField.jsx';
 import axios from 'axios';
 import { DurationProvider } from '../context/DurationContext.jsx';
+import { getAllTasks } from '../utilities/api.js';
 
 const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems, currFolderId}) => {
 	// Task list container ref
@@ -46,29 +47,24 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
 
 	// Fetch all tasks for the current folder when folder ID, new task, or edited task changes
 	useEffect(() => {
-        const getAllTasks = async () => {
-			try {
-				// Fetch tasks from the API
-				const response = await axios.get(`https://task-manager-server-6eht.onrender.com/task/getAll/${currFolderId}`);
-				
-				// Map response data to the required format
-				const taskItems = response.data.map((task) => ({
-					taskId: task.task_id,
-					name: task.name,
-					dueDate: task.due_date ? (new Date(task.due_date)).toLocaleDateString("en-US") : null,
-					priority: task.priority,
-					folderId: task.folder_id,
-					notes: task.notes,
-					tags: task.tags,
-				}));
+		const getAllTasksFromApi = async () => {
+			const allTasks = await getAllTasks(currFolderId);
 
-				// Update the state with fetched tasks
-				setTaskItems(taskItems);
-			} catch (err) {
-				console.error("Error fetching tasks:", err.message);
-			}
-        };
-        getAllTasks();
+			// Map response data to the required format
+			const taskItems = allTasks.map((task) => ({
+				taskId: task.task_id,
+				name: task.name,
+				dueDate: task.due_date ? (new Date(task.due_date)).toLocaleDateString("en-US") : null,
+				priority: task.priority,
+				folderId: task.folder_id,
+				notes: task.notes,
+				tags: task.tags,
+			}));
+	
+			// Update the state with fetched tasks
+			setTaskItems(taskItems);
+		}
+        getAllTasksFromApi();
     }, [currFolderId, newTask, editTaskId, taskDeleted]);
 
 	// Add the new task to the task list when `newTask` changes
