@@ -181,8 +181,6 @@ export const patchNotes = async (taskId) => {
 };
 
 export const setElapsedMinutes = async (taskId, elapsedMinutes) => {
-    console.log("elapsed", taskId, elapsedMinutes)
-
     try {
         await axios.patch("https://task-manager-server-6eht.onrender.com/times/setElapsedMinutes", {
             taskId: taskId,
@@ -194,8 +192,6 @@ export const setElapsedMinutes = async (taskId, elapsedMinutes) => {
 };
 
 export const setRestedMinutes = async (taskId, elapsedMinutes) => {
-    console.log("rested", taskId, elapsedMinutes)
-
     try {
         await axios.patch("https://task-manager-server-6eht.onrender.com/times/setRestedMinutes", {
             taskId: taskId,
