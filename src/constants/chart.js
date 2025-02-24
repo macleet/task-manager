@@ -25,7 +25,7 @@ export const options = {
     },
     scales: {
         x: {
-            stacked: true, 
+            stacked: false, 
             grid: {
                 display: false,
             },
