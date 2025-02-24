@@ -2,7 +2,7 @@ import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
 import { useDurationContext } from '../../../context/DurationContext';
 
-export default ({ taskId }) => {
+export default ({}) => {
     const { activeTime, restedTime } = useDurationContext();
     return(
         <div className="flex w-1/5 flex-col gap-6" >
