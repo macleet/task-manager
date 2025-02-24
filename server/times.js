@@ -56,7 +56,7 @@ timesRouter.patch("/setElapsedMinutes", async (req, res) => {
         const result = await pool.query("SELECT elapsed_minutes FROM times WHERE task_id = $1 AND date = $2", [taskId, currentDate]);
         if (result.rowCount < 1) {
             await pool.query("INSERT INTO times (task_id, date, elapsed_minutes) VALUES ($1, $2, $3)", [taskId, currentDate, elapsedTime]);
-            res.json();
+            return res.json();
         }
         const { elapsed_minutes: currentMinutes } = result.rows[0];
         await pool.query("UPDATE times SET elapsed_minutes = $1 WHERE task_id = $2 AND date = $3", [elapsedTime + currentMinutes, taskId, currentDate]);
@@ -73,7 +73,7 @@ timesRouter.patch("/setRestedMinutes", async (req, res) => {
         const result = await pool.query("SELECT rested_minutes FROM times WHERE task_id = $1 AND date = $2", [taskId, currentDate]);
         if (result.rowCount < 1) {
             await pool.query("INSERT INTO times (task_id, date, rested_minutes) VALUES ($1, $2, $3)", [taskId, currentDate, elapsedTime]);
-            res.json();
+            return res.json();
         }
         const { rested_minutes: currentMinutes } = result.rows[0];
         await pool.query("UPDATE times SET rested_minutes = $1 WHERE task_id = $2 AND date = $3", [elapsedTime + currentMinutes, taskId, currentDate]);
