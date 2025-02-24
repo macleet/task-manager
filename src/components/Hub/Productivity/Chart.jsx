@@ -14,10 +14,12 @@ import {
 import { useTimerContext } from "../../../context/TimerContext";
 import { getGraphData } from "../../../utilities/api";
 import { options, daysLabel, restedDataset, workedDataset } from "../../../constants/chart";
+import { useActiveTaskContext } from "../../../context/ActiveTaskContext";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default ({ taskId }) => {
+    const { activeTaskId } = useActiveTaskContext();
     const { paused } = useTimerContext();
     const [weekPeriod, setWeekPeriod] = useState(new WeekPeriod());
 
@@ -39,10 +41,10 @@ export default ({ taskId }) => {
     }, [weekPeriod, paused]);
 
     return(
-        <div className="flex flex-col bg-blue-200 bg-opacity-40 rounded-xl w-1/2 shadow-sm" >
-            <div className="h-[280px]">
+        <div className="flex flex-col bg-blue-200 bg-opacity-40 rounded-xl w-full shadow-sm" >
+            <div className="h-[280px] w-full">
                 <Bar
-                    redraw={true}
+                    redraw={paused && taskId === activeTaskId}
                     data={chartData}
                     options={options}
                 />
