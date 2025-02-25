@@ -181,9 +181,16 @@ export const patchNotes = async (taskId) => {
 };
 
 export const setElapsedMinutes = async (taskId, elapsedMinutes) => {
+    const getLocalISOString = () => {
+        const currentDate = new Date();
+        const offset = currentDate.getTimezoneOffset() * 60000;
+        return new Date(currentDate - offset).toISOString().split("T")[0];
+    };
+    const currentDate = getLocalISOString();
     try {
         await axios.patch("https://task-manager-server-6eht.onrender.com/times/setElapsedMinutes", {
-            taskId: taskId,
+            taskId,
+            currentDate,
             elapsedTime: elapsedMinutes
         });
     } catch (error) {
