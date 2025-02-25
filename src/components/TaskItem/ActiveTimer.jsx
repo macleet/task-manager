@@ -38,9 +38,8 @@ export default ({ taskId, editTaskId }) => {
     const toggleActiveTask = async (event) => {
         const isChecked = event.target.checked;
         await patchIsActive(taskId, isChecked);
-        
-        const active = await getIsActive(taskId);
-        setIsActive(active);
+
+        setIsActive(prev => !prev);
         setActiveTaskId(isChecked ? taskId : -1);
     };
 
