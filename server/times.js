@@ -1,6 +1,6 @@
 import pool from "./db.js";
 import { Router } from "express";
-import { convertTimeDuration, getLocalISOString } from "./utilities.js";
+import { convertTimeDuration } from "./utilities.js";
 const timesRouter = Router();
 
 timesRouter.get("/getActive", async (req, res) => {
