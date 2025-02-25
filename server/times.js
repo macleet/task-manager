@@ -66,9 +66,8 @@ timesRouter.patch("/setElapsedMinutes", async (req, res) => {
 });
 
 timesRouter.patch("/setRestedMinutes", async (req, res) => {
-    const currentDate = getLocalISOString();
     try {
-        const { taskId, elapsedTime } = req.body;
+        const { taskId, elapsedTime, currentDate } = req.body;
         const result = await pool.query("SELECT rested_minutes FROM times WHERE task_id = $1 AND date = $2", [taskId, currentDate]);
         if (result.rowCount < 1) {
             await pool.query("INSERT INTO times (task_id, date, rested_minutes) VALUES ($1, $2, $3)", [taskId, currentDate, elapsedTime]);
