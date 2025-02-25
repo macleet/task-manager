@@ -14,3 +14,9 @@ export const convertTimeDuration = (minutes) => {
 
     return durationTextArray.join(":");
 };
+
+export const getLocalISOString = () => {
+    const currentDate = new Date();
+    const offset = currentDate.getTimezoneOffset() * 60000;
+    return new Date(currentDate - offset).toISOString().split("T")[0];
+};

@@ -1,6 +1,6 @@
 import pool from "./db.js";
 import { Router } from "express";
-import { convertTimeDuration } from "./utilities.js";
+import { convertTimeDuration, getLocalISOString } from "./utilities.js";
 const timesRouter = Router();
 
 timesRouter.get("/getActive", async (req, res) => {
@@ -50,7 +50,7 @@ timesRouter.patch("/setActive", async (req, res) => {
 });
 
 timesRouter.patch("/setElapsedMinutes", async (req, res) => {
-    const currentDate = new Date().toISOString().split('T')[0];
+    const currentDate = getLocalISOString();
     try {
         const { taskId, elapsedTime } = req.body;
         const result = await pool.query("SELECT elapsed_minutes FROM times WHERE task_id = $1 AND date = $2", [taskId, currentDate]);
@@ -67,7 +67,7 @@ timesRouter.patch("/setElapsedMinutes", async (req, res) => {
 });
 
 timesRouter.patch("/setRestedMinutes", async (req, res) => {
-    const currentDate = new Date().toISOString().split('T')[0];
+    const currentDate = getLocalISOString();
     try {
         const { taskId, elapsedTime } = req.body;
         const result = await pool.query("SELECT rested_minutes FROM times WHERE task_id = $1 AND date = $2", [taskId, currentDate]);
