@@ -99,16 +99,27 @@ timesRouter.get("/getActiveTask", async (req, res) => {
 });
 
 timesRouter.get("/getChartData", async (req, res) => {
-    const activeData = [], restData = [];
     const { taskId, periodDates } = req.query;
+    const activeData = [], restData = [];
+
     try {
+        const result = await pool.query(
+            "SELECT date, elapsed_minutes, rested_minutes FROM times WHERE task_id = $1 AND date = ANY($2)",
+            [taskId, periodDates]
+        );
+
+        const dataMap = result.rows.reduce((acc, row) => {
+            acc[row.date] = row;
+            return acc;
+        }, {});
+
         for (const date of periodDates) {
-            const result = await pool.query("SELECT elapsed_minutes, rested_minutes FROM times WHERE task_id = $1 AND date = $2", [taskId, date]);
-            const { elapsed_minutes: elapsedMinutes = 0, rested_minutes: restedMinutes = 0 } = result.rows[0] || {};
+            const { elapsed_minutes: elapsedMinutes = 0, rested_minutes: restedMinutes = 0 } = dataMap[date] || {};
             const toHours = (minutes) => minutes / 60;
             activeData.push(toHours(elapsedMinutes));
             restData.push(toHours(restedMinutes));
         }
+
         res.json({ activeData, restData });
     } catch (error) {
         console.error("Error getting chart data", error);
