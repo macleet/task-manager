@@ -1,6 +1,6 @@
 import WeekPeriod from "../../../utilities/WeekPeriod";
 import WeekNavigator from "./WeekNavigator";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Bar } from "react-chartjs-2";
 import { 
     Chart as ChartJS, 
@@ -19,24 +19,27 @@ import { useActiveTaskContext } from "../../../context/ActiveTaskContext";
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export default ({ taskId }) => {
-    const { activeTaskId } = useActiveTaskContext();
+    const chartRef = useRef(null);
     const { paused } = useTimerContext();
+    const { activeTaskId } = useActiveTaskContext();
     const [weekPeriod, setWeekPeriod] = useState(new WeekPeriod());
-
     const [chartData, setChartData] = useState({
         labels: daysLabel,
-        datasets: [restedDataset, workedDataset]
+        datasets: []
     });
 
+    const getGraphDataFromApi = async () => {
+        const { activeData, restData } = await getGraphData(taskId, weekPeriod.getPeriodDatesArray());
+        setChartData(prev => ({
+            ...prev,
+            datasets: [{...restedDataset, data: restData}, {...workedDataset, data: activeData}]
+        }));
+        chartRef.current?.update();
+    };
+
+    useEffect(() => { getGraphDataFromApi() }, []);
     useEffect(() => {
-        if (!paused) return;
-        const getGraphDataFromApi = async () => {
-            const { activeData, restData } = await getGraphData(taskId, weekPeriod.getPeriodDatesArray());
-            setChartData(prev => ({
-                ...prev,
-                datasets: [{...restedDataset, data: restData}, {...workedDataset, data: activeData}]
-            }));
-        };
+        if (!paused || taskId !== activeTaskId) return;
         getGraphDataFromApi();
     }, [weekPeriod, paused]);
 
@@ -44,7 +47,8 @@ export default ({ taskId }) => {
         <div className="flex flex-col bg-blue-200 bg-opacity-40 rounded-xl w-full shadow-sm" >
             <div className="h-[280px] w-full">
                 <Bar
-                    redraw={true}
+                    // redraw={true}
+                    ref={chartRef}
                     data={chartData}
                     options={options}
                 />
