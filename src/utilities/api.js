@@ -163,7 +163,7 @@ export const patchPriority = async (taskId, priority) => {
 export const patchDueDate = async (taskId, dueDate) => {
     try {
         await axios.patch(`https://task-manager-server-6eht.onrender.com/task/dateChange/${taskId}`, {	
-            new_date: dueDate,
+            newDate: dueDate,
         });
     } catch (error) {
         console.error("Error patching due date", error);
