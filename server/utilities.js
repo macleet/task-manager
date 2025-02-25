@@ -1,4 +1,7 @@
 export const convertTimeDuration = (minutes) => {
+    if (minutes === 0) {
+        return "0m";
+    }
     const durationTextArray = [];
     let days = 0, hours = 0;
 
