@@ -1,6 +1,6 @@
 import Checkbox from './Checkbox.jsx';
 import { useState } from 'react';
-import axios from 'axios';
+import { patchStepCompleted } from '../../../utilities/api.js';
 
 export default ({ stepId, name, description, completed }) => {
     // State to track whether the step is completed
@@ -8,15 +8,9 @@ export default ({ stepId, name, description, completed }) => {
 
     // Handler for checkbox change to update step completion status
     const handleOnChange = async (event) => {
-        try {
-            setComplete(event.target.checked); // Update local state
-            await axios.patch("https://task-manager-server-6eht.onrender.com/subtask/completedStep", {
-                stepId: stepId,
-                completed: event.target.checked // Send updated completion status to the server
-            });
-        } catch (error) {
-            console.error("Error patching completed property", error);
-        }
+        const isChecked = event.target.checked
+        setComplete(isChecked); // Update local state
+        await patchStepCompleted(stepId, event.target.checked);
     };
 
     return (

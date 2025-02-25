@@ -220,3 +220,63 @@ export const getGraphData = async (taskId, periodDates) => {
        console.error("GET request error for retrieving graph data", error);
     }
 }
+
+export const getPhases = async (taskId) => {
+    try {
+        const respose = await axios.get(`https://task-manager-server-6eht.onrender.com/subtask/phases`, {
+            params: {
+                taskId
+            }
+        });
+        return respose.data;
+    } catch (error) {
+        console.error("Error fetching phases", error);
+    }
+};
+
+export const postGenerateSubtasks = async (taskId, taskName, taskDetails) => {
+    try {
+        await axios.post(`https://task-manager-server-6eht.onrender.com/subtask/generate`, {
+            taskId,
+            taskName,
+            taskDetails
+        });
+    } catch (error) {
+        console.error("Error generating subtasks", error);
+    }
+};
+
+export const patchPhaseCompleted = async (phaseId, completed) => {
+    try {
+        await axios.patch("https://task-manager-server-6eht.onrender.com/subtask/completedPhase", {
+            phaseId,
+            completed
+        });
+    } catch (error) {
+        console.error("Error generating subtasks", error);
+    }
+};
+
+export const getPhaseSteps = async (phaseId) => {
+    try {
+        const response = await axios.get("https://task-manager-server-6eht.onrender.com/subtask/steps", {
+            params: {
+                phaseId
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error generating subtasks", error);
+    }
+};
+
+export const patchStepCompleted = async (stepId, completed) => {
+    try {
+        await axios.patch("https://task-manager-server-6eht.onrender.com/subtask/completedStep", {
+            stepId,
+            completed
+        });
+    } catch (error) {
+        console.error("Error generating subtasks", error);
+    }
+};

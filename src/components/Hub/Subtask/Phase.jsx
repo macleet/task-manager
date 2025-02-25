@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Checkbox from './Checkbox.jsx';
 import Step from './Step.jsx';
-import axios from 'axios';
+import { getPhases, getPhaseSteps, patchPhaseCompleted } from '../../../utilities/api.js';
 
 export default ({ phaseId, name, description, completed, isOpen, steps }) => {
     // State to manage the steps of the phase
@@ -11,30 +11,15 @@ export default ({ phaseId, name, description, completed, isOpen, steps }) => {
 
     // Handler for checkbox change to update phase completion status
     const handleOnChange = async (event) => {
-        try {
-            setComplete(event.target.checked); // Update local state
-            await axios.patch("https://task-manager-server-6eht.onrender.com/subtask/completedPhase", {
-                phaseId: phaseId,
-                completed: event.target.checked // Send updated completion status to the server
-            });
-        } catch (error) {
-            console.error("Error patching completed property", error);
-        }
+        setComplete(event.target.checked);
+        await patchPhaseCompleted(phaseId, event.target.checked)
     };
 
     // Fetch steps for the phase when the component mounts
     useEffect(() => {
         const getSteps = async () => {
-            try {
-                const { steps } = (await axios.get("https://task-manager-server-6eht.onrender.com/subtask/steps", {
-                    params: {
-                        phaseId: phaseId
-                    }
-                })).data;
-                steps && setPhaseSteps(steps); // Update steps state if data is retrieved
-            } catch (error) {
-                console.error("Error retrieving steps", error);
-            }
+            const { steps } = await getPhaseSteps(phaseId);
+            steps && setPhaseSteps(steps); // Update steps state if data is retrieved
         };
         getSteps();
     }, []); // Empty dependency array ensures this runs only once on mount

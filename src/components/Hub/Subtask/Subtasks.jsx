@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import Phase from "./Phase.jsx";
+import { getPhases, postGenerateSubtasks } from '../../../utilities/api.js';
 
 export default ({ name, taskId, currentTab }) => {
     const [phases, setPhases] = useState(null); // Stores the phases of the subtask
@@ -10,9 +10,9 @@ export default ({ name, taskId, currentTab }) => {
 
     const handleDetailsInput = (event) => setTaskDetails(event.target.value);
 
-    const handleInputKeydown = (event) => {
+    const handleInputKeydown = async (event) => {
         if (event.key === "Enter" && taskDetails !== "") {
-            generateSubtasks();
+            await generateSubtasks();
             setTaskDetails(""); // Clear input after generating subtasks
             return;
         }
@@ -21,19 +21,11 @@ export default ({ name, taskId, currentTab }) => {
     useEffect(() => {
         if (isLoading) return; // Skip fetching if already loading
 
-        const getPhases = async () => {
-            try {
-                const { phases } = (await axios.get(`https://task-manager-server-6eht.onrender.com/subtask/phases`, {
-                    params: {
-                        taskId: taskId
-                    }
-                })).data;
-                setPhases(phases); // Update phases state with fetched data
-            } catch (error) {
-                console.error("Error fetching phases", error);
-            }
+        const getPhasesFromApi = async () => {
+            const { phases } = await getPhases(taskId);
+            setPhases(phases); // Update phases state with fetched data
         };
-        getPhases();
+        getPhasesFromApi();
     }, [isLoading]); // Fetch phases when `isLoading` changes
 
     const generateSubtasks = async () => {
@@ -41,11 +33,7 @@ export default ({ name, taskId, currentTab }) => {
 
         try {
             setIsLoading(true); // Set loading state to true
-            await axios.post(`https://task-manager-server-6eht.onrender.com/subtask/generate`, {
-                taskId: taskId,
-                taskName: name,
-                taskDetails: taskDetails
-            });
+            await postGenerateSubtasks(taskId, name, taskDetails);
         } catch (error) {
             console.error("Error generating subtasks", error);
         } finally {
@@ -92,7 +80,7 @@ export default ({ name, taskId, currentTab }) => {
             }
 
             {isLoading && 
-                <div className="flex justify-center items-center">
+                <div className="flex justify-center items-center h-32">
                     <div className="animate-spin w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full"></div>
                 </div>
             }
