@@ -42,7 +42,7 @@ class WeekPeriod {
         for (let i = 0; i < 7; i++) {
             const tempDate = new Date(dateObj);
             tempDate.setDate(dateObj.getDate() + i);
-            datesArray.push(tempDate);
+            datesArray.push(tempDate.toISOString().split("T")[0]);
         }
 
         return datesArray;
