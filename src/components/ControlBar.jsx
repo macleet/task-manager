@@ -2,6 +2,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccessAlarmRoundedIcon from '@mui/icons-material/AccessAlarmRounded';
 import Timer from "./Timer";
+import { getSearchRes } from '../utilities/api';
 
 import { 
     useRef,

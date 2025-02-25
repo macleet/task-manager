@@ -1,3 +1,5 @@
+import { postTask } from "../utilities/api";
+
 const TaskAddField = ({ currFolderId, setNewTask }) => {
     // Handle the Enter key press to add a new task
     const handleEnter = async (event) => {
