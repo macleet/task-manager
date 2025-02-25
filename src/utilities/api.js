@@ -1,4 +1,5 @@
 import axios from 'axios';
+import WeekPeriod from './WeekPeriod';
 
 export const getAllFolders = async () => {
     try {
@@ -68,7 +69,7 @@ export const getActiveTask = async (taskId) => {
     try {
         const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getActiveTask", {
             params: {
-                taskId: taskId
+                taskId
             }
         });
         return response.data;
@@ -82,7 +83,7 @@ export const getIsActive = async (taskId) => {
     try {
         const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getActive", {
             params: {
-                taskId: taskId
+                taskId
             }
         });
         return response.data.active;
@@ -107,7 +108,7 @@ export const getActiveDurationText = async (taskId) => {
     try {
         const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getElapsedMinutes", {
             params: {
-                taskId: taskId
+                taskId
             }
         });
         return response.data.durationText;
@@ -120,7 +121,7 @@ export const getRestedDurationText = async (taskId) => {
     try {
         const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getRestedMinutes", {
             params: {
-                taskId: taskId
+                taskId
             }
         });
         return response.data.durationText;
@@ -129,11 +130,11 @@ export const getRestedDurationText = async (taskId) => {
     }
 };
 
-export const postTask = async (name, currFolderId) => {
+export const postTask = async (name, folderId) => {
     try {
         await axios.post('https://task-manager-server-6eht.onrender.com/task/add', {
-            name: name,
-            folderId: currFolderId
+            name,
+            folderId
         });
     } catch (err) {
         console.error("Error adding new task", err.message);
@@ -142,7 +143,7 @@ export const postTask = async (name, currFolderId) => {
 
 export const patchName = async (taskId, name) => {
     try {
-        await axios.patch(`https://task-manager-server-6eht.onrender.com/task/nameChange/${taskId}`, { "newName": name });
+        await axios.patch(`https://task-manager-server-6eht.onrender.com/task/nameChange/${taskId}`, { newName: name });
     } catch (error) {
         console.error("Error patching name", error);
     }
@@ -173,7 +174,7 @@ export const patchNotes = async (taskId) => {
     try {
         await axios.patch("https://task-manager-server-6eht.onrender.com/task/notesChange", {	
             taskId,
-            notes: notes
+            notes
         });
     } catch (error) {
         console.error("Error patching notes", error);
@@ -181,12 +182,7 @@ export const patchNotes = async (taskId) => {
 };
 
 export const setElapsedMinutes = async (taskId, elapsedMinutes) => {
-    const getLocalISOString = () => {
-        const currentDate = new Date();
-        const offset = currentDate.getTimezoneOffset() * 60000;
-        return new Date(currentDate - offset).toISOString().split("T")[0];
-    };
-    const currentDate = getLocalISOString();
+    const currentDate = WeekPeriod.getCurrentLocalISO();
     try {
         await axios.patch("https://task-manager-server-6eht.onrender.com/times/setElapsedMinutes", {
             taskId,
@@ -199,9 +195,11 @@ export const setElapsedMinutes = async (taskId, elapsedMinutes) => {
 };
 
 export const setRestedMinutes = async (taskId, elapsedMinutes) => {
+    const currentDate = WeekPeriod.getCurrentLocalISO();
     try {
         await axios.patch("https://task-manager-server-6eht.onrender.com/times/setRestedMinutes", {
-            taskId: taskId,
+            taskId,
+            currentDate,
             elapsedTime: elapsedMinutes
         });
     } catch (error) {

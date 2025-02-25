@@ -35,6 +35,12 @@ class WeekPeriod {
         this.checkCases();
     }
 
+    static getCurrentLocalISO = () => {
+        const currentDate = new Date();
+        const offset = currentDate.getTimezoneOffset() * 60000;
+        return new Date(currentDate - offset).toISOString().split("T")[0];
+    };
+
     getPeriodDatesArray() {
         const datesArray = [];
         const dateObj = this.start.getDateObject();
