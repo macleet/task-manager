@@ -44,7 +44,7 @@ export default ({ taskId }) => {
         <div className="flex flex-col bg-blue-200 bg-opacity-40 rounded-xl w-full shadow-sm" >
             <div className="h-[280px] w-full">
                 <Bar
-                    redraw={paused && taskId === activeTaskId}
+                    redraw={true}
                     data={chartData}
                     options={options}
                 />
