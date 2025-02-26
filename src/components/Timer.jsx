@@ -1,8 +1,4 @@
-import {
-    useState,
-    useEffect,
-} from 'react'
-
+import { useState, useEffect } from 'react';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
@@ -19,8 +15,10 @@ export default ({}) => {
         folderName: ""
     });
     const [currentSession, setCurrentSession] = useState(null);
-    const [minutes, setMinutes] = useState(null);
-    const [seconds, setSeconds] = useState(0);
+    const [timerTime, setTimerTime] = useState({
+        minutes: 0,
+        seconds: 0
+    });
     const {paused, setPaused} = useTimerContext();
     const [pausedTime, setPausedTime] = useState({
         minutes: 0,
@@ -47,8 +45,12 @@ export default ({}) => {
         sessionQueue.append(longBreakSession);
 
         setCurrentSession(sessionQueue.head);
-        setMinutes(sessionQueue.head.duration);
-        setSeconds(0);
+        setTimerTime({
+            minutes: sessionQueue.head.duration,
+            seconds: 0
+        });
+        // setMinutes(sessionQueue.head.duration);
+        // setSeconds(0);
         setPausedTime({
             minutes: sessionQueue.head.duration,
             seconds: 0
@@ -57,39 +59,43 @@ export default ({}) => {
 
     useEffect(() => {
         if (paused) return;
-        if (minutes === 0 && seconds === 0) {
+        if (timerTime.minutes === 0 && timerTime.seconds === 0) {
             setPaused(true);
             return;
         }
-        if (seconds === -1 && minutes > 0) {
-            setMinutes(minutes-1);
-            setSeconds(59);
+        if (timerTime.seconds === -1 && timerTime.minutes > 0) {
+            setTimerTime({
+                minutes: timerTime.minutes - 1,
+                seconds: 59
+            });
         }
-        if (seconds < 60) {
-            const timerId = setTimeout(() => setSeconds(seconds-1), 1);
+        if (timerTime.seconds < 60) {
+            const timerId = setTimeout(() => setTimerTime((prev) => ({...prev, seconds: prev.seconds - 1})), 1);
             return () => clearTimeout(timerId);
         }
-    }, [seconds, paused]);
+    }, [timerTime.seconds, paused]);
 
     const handleTogglePause = async () => {
         setPaused(!paused);
 
         if (paused || activeTaskId < 0) return;
 
-        const elapsedMinutes = Math.round(((pausedTime.minutes - minutes) * 60 - (pausedTime.seconds - seconds)) / 60);
+        const elapsedMinutes = Math.round(((pausedTime.minutes - timerTime.minutes) * 60 - (pausedTime.seconds - timerTime.seconds)) / 60);
         setPausedTime({
-            minutes: minutes,
-            seconds: seconds
+            minutes: timerTime.minutes,
+            seconds: timerTime.seconds
         });
         if (currentSession.type === "work") await setElapsedMinutes(activeTaskId, elapsedMinutes);
         else await setRestedMinutes(activeTaskId, elapsedMinutes);
     };
 
     const handleNext = () => {
-        setSeconds(0);
         setPaused(true);
         setCurrentSession(currentSession.next);
-        setMinutes(currentSession.next.duration);
+        setTimerTime({
+            minutes: currentSession.next.duration,
+            seconds: 0
+        });
         setPausedTime({
             minutes: currentSession.next.duration,
             seconds: 0
@@ -97,10 +103,12 @@ export default ({}) => {
     };
 
     const handlePrev = () => {
-        setSeconds(0);
         setPaused(true);
         setCurrentSession(currentSession.prev);
-        setMinutes(currentSession.prev.duration);
+        setTimerTime({
+            minutes: currentSession.prev.duration,
+            seconds: 0
+        });
         setPausedTime({
             minutes: currentSession.prev.duration,
             seconds: 0
@@ -110,9 +118,9 @@ export default ({}) => {
     return(
         <div className="flex flex-col justify-center items-center w-full p-4 gap-5 text-gray-800 bg-blue-200 rounded-xl shadow border-2 border-blue-500 border-opacity-40" >
             <div className="text-3xl font-semibold w-full flex justify-center items-center" >
-                <span>{minutes}</span>
+                <span>{timerTime.minutes}</span>
                 :
-                <span>{seconds < 10 ? "0" + seconds.toString() : seconds}</span>
+                <span>{timerTime.seconds < 10 ? "0" + timerTime.seconds.toString() : timerTime.seconds}</span>
             </div>
 
             <div className={`text-lg shadow-sm w-fit flex items-center justify-center p-2 gap-8 bg-blue-400 bg-opacity-70 rounded-full`} >
