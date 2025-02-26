@@ -9,7 +9,9 @@ const pool = new pg.Pool({
     connectionString: isDevelopment 
     ? process.env.EXTERNAL_DATABASE_URL
     : process.env.DATABASE_URL,
-    ssl: true
+    ssl: isDevelopment
+        ? { rejectUnauthorized: false }
+        : true
 });
 
 if (!isDevelopment) {
