@@ -104,7 +104,7 @@ timesRouter.get("/getChartData", async (req, res) => {
 
     try {
         const result = await pool.query(
-            "SELECT date, elapsed_minutes, rested_minutes FROM times WHERE task_id = $1 AND date = ANY($2::date[])",
+            "SELECT TO_CHAR(date, 'YYYY-MM-DD') AS date, elapsed_minutes, rested_minutes FROM times WHERE task_id = $1 AND date = ANY($2::date[])",
             [taskId, periodDates]
         );
 
