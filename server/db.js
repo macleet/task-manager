@@ -4,11 +4,12 @@ import pg from 'pg';
 import path from 'path';
 
 const isDevelopment = process.env.NODE_ENV === "development";
+console.log(process.env.NODE_ENV);
 
 const pool = new pg.Pool({
     connectionString: isDevelopment 
-    ? process.env.EXTERNAL_DATABASE_URL
-    : process.env.DATABASE_URL,
+        ? process.env.EXTERNAL_DATABASE_URL
+        : process.env.DATABASE_URL,
     ssl: {
         rejectUnauthorized: !isDevelopment
     }
