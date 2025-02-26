@@ -3,7 +3,7 @@ import fs from 'fs';
 import pg from 'pg';
 import path from 'path';
 
-const isDevelopment = process.env.DEVELOPMENT === "true";
+const isDevelopment = process.env.NODE_ENV === "development";
 
 const pool = new pg.Pool({
     connectionString: isDevelopment 
