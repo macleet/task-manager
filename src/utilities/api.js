@@ -1,9 +1,11 @@
 import axios from 'axios';
 import WeekPeriod from './WeekPeriod';
 
+const baseUrl = import.meta.env.VITE_BASE_URL;
+
 export const getAllFolders = async () => {
     try {
-        const response = await axios.get('https://task-manager-server-6eht.onrender.com/folder/');
+        const response = await axios.get(`${baseUrl}/folder/`);
         return response.data;
     } catch (error) {
         console.error("Error fetching folders", error);
@@ -12,7 +14,7 @@ export const getAllFolders = async () => {
 
 export const addNewFolder = async (name) => {
     try {
-        const response = await axios.post(`https://task-manager-server-6eht.onrender.com/folder/add/${name}`);
+        const response = await axios.post(`${baseUrl}/folder/add/${name}`);
         return response.data.id;
     } catch (error) {
         console.error("Error adding new folder", error);
@@ -21,7 +23,7 @@ export const addNewFolder = async (name) => {
 
 export const changeFolderName = async (folderId, name) => {
     try {
-        await axios.patch(`https://task-manager-server-6eht.onrender.com/folder/change/${folderId}`, { name });
+        await axios.patch(`${baseUrl}/folder/change/${folderId}`, { name });
     } catch (err) {
         console.error(err.message);
     }
@@ -29,7 +31,7 @@ export const changeFolderName = async (folderId, name) => {
 
 export const deleteFolder = async (folderId) => {
     try {
-        await axios.delete(`https://task-manager-server-6eht.onrender.com/folder/delete/${folderId}`);
+        await axios.delete(`${baseUrl}/folder/delete/${folderId}`);
     } catch (error) {
         console.error("Error deleting folder", error);
     }
@@ -37,7 +39,7 @@ export const deleteFolder = async (folderId) => {
 
 export const getAllTasks = async (currFolderId) => {
     try {
-        const response = await axios.get(`https://task-manager-server-6eht.onrender.com/task/getAll/${currFolderId}`);
+        const response = await axios.get(`${baseUrl}/task/getAll/${currFolderId}`);
         return response.data;
     } catch (err) {
         console.error("Error fetching tasks:", err.message);
@@ -46,18 +48,18 @@ export const getAllTasks = async (currFolderId) => {
 
 export const getSearchRes = async (query) => {
     try {
-        const response = await axios.get('https://task-manager-server-6eht.onrender.com/task/search', {
-            params: { search_query: query }, // Send search query to the server
+        const response = await axios.get(`${baseUrl}/task/search`, {
+            params: { search_query: query },
         });
         return response.data;
     } catch (err) {
-        console.error(err.message); // Handle errors
+        console.error(err.message);
     }
 };
 
 export const deleteTask = async (taskId) => {
     try {
-        await axios.delete("https://task-manager-server-6eht.onrender.com/task/delete", {
+        await axios.delete(`${baseUrl}/task/delete`, {
             data: { id: taskId }
         });
     } catch(error) {
@@ -67,7 +69,7 @@ export const deleteTask = async (taskId) => {
 
 export const getActiveTask = async (taskId) => {
     try {
-        const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getActiveTask", {
+        const response = await axios.get(`${baseUrl}/times/getActiveTask`, {
             params: {
                 taskId
             }
@@ -81,7 +83,7 @@ export const getActiveTask = async (taskId) => {
 
 export const getIsActive = async (taskId) => {
     try {
-        const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getActive", {
+        const response = await axios.get(`${baseUrl}/times/getActive`, {
             params: {
                 taskId
             }
@@ -94,7 +96,7 @@ export const getIsActive = async (taskId) => {
 
 export const patchIsActive = async (taskId, isChecked) => {
     try {
-        await axios.patch("https://task-manager-server-6eht.onrender.com/times/setActive", {
+        await axios.patch(`${baseUrl}/times/setActive`, {
             taskId,
             isActive: isChecked
         });
@@ -106,7 +108,7 @@ export const patchIsActive = async (taskId, isChecked) => {
 
 export const getActiveDurationText = async (taskId) => {
     try {
-        const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getElapsedMinutes", {
+        const response = await axios.get(`${baseUrl}/times/getElapsedMinutes`, {
             params: {
                 taskId
             }
@@ -119,7 +121,7 @@ export const getActiveDurationText = async (taskId) => {
 
 export const getRestedDurationText = async (taskId) => {
     try {
-        const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getRestedMinutes", {
+        const response = await axios.get(`${baseUrl}/times/getRestedMinutes`, {
             params: {
                 taskId
             }
@@ -132,7 +134,7 @@ export const getRestedDurationText = async (taskId) => {
 
 export const postTask = async (name, folderId) => {
     try {
-        await axios.post('https://task-manager-server-6eht.onrender.com/task/add', {
+        await axios.post(`${baseUrl}/task/add`, {
             name,
             folderId
         });
@@ -143,7 +145,7 @@ export const postTask = async (name, folderId) => {
 
 export const patchName = async (taskId, name) => {
     try {
-        await axios.patch(`https://task-manager-server-6eht.onrender.com/task/nameChange/${taskId}`, { newName: name });
+        await axios.patch(`${baseUrl}/task/nameChange/${taskId}`, { newName: name });
     } catch (error) {
         console.error("Error patching name", error);
     }
@@ -151,7 +153,7 @@ export const patchName = async (taskId, name) => {
 
 export const patchPriority = async (taskId, priority) => {
     try {
-        await axios.patch(`https://task-manager-server-6eht.onrender.com/task/priority`, { 
+        await axios.patch(`${baseUrl}/task/priority`, { 
             taskId,
             newPriority: priority
         });
@@ -162,7 +164,7 @@ export const patchPriority = async (taskId, priority) => {
 
 export const patchDueDate = async (taskId, dueDate) => {
     try {
-        await axios.patch(`https://task-manager-server-6eht.onrender.com/task/dateChange/${taskId}`, {	
+        await axios.patch(`${baseUrl}/task/dateChange/${taskId}`, {	
             newDate: dueDate,
         });
     } catch (error) {
@@ -172,7 +174,7 @@ export const patchDueDate = async (taskId, dueDate) => {
 
 export const patchNotes = async (taskId) => {
     try {
-        await axios.patch("https://task-manager-server-6eht.onrender.com/task/notesChange", {	
+        await axios.patch(`${baseUrl}/task/notesChange`, {	
             taskId,
             notes
         });
@@ -184,7 +186,7 @@ export const patchNotes = async (taskId) => {
 export const setElapsedMinutes = async (taskId, elapsedMinutes) => {
     const currentDate = WeekPeriod.getCurrentLocalISO();
     try {
-        await axios.patch("https://task-manager-server-6eht.onrender.com/times/setElapsedMinutes", {
+        await axios.patch(`${baseUrl}/times/setElapsedMinutes`, {
             taskId,
             currentDate,
             elapsedTime: elapsedMinutes
@@ -197,7 +199,7 @@ export const setElapsedMinutes = async (taskId, elapsedMinutes) => {
 export const setRestedMinutes = async (taskId, elapsedMinutes) => {
     const currentDate = WeekPeriod.getCurrentLocalISO();
     try {
-        await axios.patch("https://task-manager-server-6eht.onrender.com/times/setRestedMinutes", {
+        await axios.patch(`${baseUrl}/times/setRestedMinutes`, {
             taskId,
             currentDate,
             elapsedTime: elapsedMinutes
@@ -209,7 +211,7 @@ export const setRestedMinutes = async (taskId, elapsedMinutes) => {
 
 export const getGraphData = async (taskId, periodDates) => {
     try {
-        const response = await axios.get("https://task-manager-server-6eht.onrender.com/times/getChartData", {
+        const response = await axios.get(`${baseUrl}/times/getChartData`, {
             params: {
                 taskId,
                 periodDates
@@ -223,7 +225,7 @@ export const getGraphData = async (taskId, periodDates) => {
 
 export const getPhases = async (taskId) => {
     try {
-        const respose = await axios.get(`https://task-manager-server-6eht.onrender.com/subtask/phases`, {
+        const respose = await axios.get(`${baseUrl}/subtask/phases`, {
             params: {
                 taskId
             }
@@ -236,7 +238,7 @@ export const getPhases = async (taskId) => {
 
 export const postGenerateSubtasks = async (taskId, taskName, taskDetails) => {
     try {
-        await axios.post(`https://task-manager-server-6eht.onrender.com/subtask/generate`, {
+        await axios.post(`${baseUrl}/subtask/generate`, {
             taskId,
             taskName,
             taskDetails
@@ -248,7 +250,7 @@ export const postGenerateSubtasks = async (taskId, taskName, taskDetails) => {
 
 export const patchPhaseCompleted = async (phaseId, completed) => {
     try {
-        await axios.patch("https://task-manager-server-6eht.onrender.com/subtask/completedPhase", {
+        await axios.patch(`${baseUrl}/subtask/completedPhase`, {
             phaseId,
             completed
         });
@@ -259,7 +261,7 @@ export const patchPhaseCompleted = async (phaseId, completed) => {
 
 export const getPhaseSteps = async (phaseId) => {
     try {
-        const response = await axios.get("https://task-manager-server-6eht.onrender.com/subtask/steps", {
+        const response = await axios.get(`${baseUrl}/subtask/steps`, {
             params: {
                 phaseId
             }
@@ -272,7 +274,7 @@ export const getPhaseSteps = async (phaseId) => {
 
 export const patchStepCompleted = async (stepId, completed) => {
     try {
-        await axios.patch("https://task-manager-server-6eht.onrender.com/subtask/completedStep", {
+        await axios.patch(`${baseUrl}/subtask/completedStep`, {
             stepId,
             completed
         });
