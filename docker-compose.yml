@@ -5,7 +5,7 @@ services:
     ports:
       - "8080:80"
     environment:
-      - REACT_APP_BACKEND_URL=http://server-backend-1:3000  # Use the backend container name
+      - VITE_BASE_URL=${VITE_BASE_URL}
     networks:
       - backend-network
 
