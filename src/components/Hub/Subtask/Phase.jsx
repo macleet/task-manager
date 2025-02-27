@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Checkbox from './Checkbox.jsx';
 import Step from './Step.jsx';
-import { getPhases, getPhaseSteps, patchPhaseCompleted } from '../../../utilities/api.js';
+import { getPhaseSteps, patchPhaseCompleted } from '../../../utilities/api.js';
 
 export default ({ phaseId, name, description, completed, isOpen, steps }) => {
     // State to manage the steps of the phase
@@ -18,8 +18,12 @@ export default ({ phaseId, name, description, completed, isOpen, steps }) => {
     // Fetch steps for the phase when the component mounts
     useEffect(() => {
         const getSteps = async () => {
-            const { steps } = await getPhaseSteps(phaseId);
-            steps && setPhaseSteps(steps); // Update steps state if data is retrieved
+            try {
+                const { steps } = await getPhaseSteps(phaseId);
+                steps && setPhaseSteps(steps); // Update steps state if data is retrieved
+            } catch (error) {
+                console.error("Error setting phase steps");
+            }
         };
         getSteps();
     }, []); // Empty dependency array ensures this runs only once on mount

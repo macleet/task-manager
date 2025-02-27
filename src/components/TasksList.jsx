@@ -47,24 +47,28 @@ const TasksList = ({showFolder, searching, taskItems, searchItems, setTaskItems,
 
 	// Fetch all tasks for the current folder when folder ID, new task, or edited task changes
 	useEffect(() => {
-		const getAllTasksFromApi = async () => {
-			const allTasks = await getAllTasks(currFolderId);
-
-			// Map response data to the required format
-			const taskItems = allTasks.map((task) => ({
-				taskId: task.task_id,
-				name: task.name,
-				dueDate: task.due_date ? (new Date(task.due_date)).toLocaleDateString("en-US") : null,
-				priority: task.priority,
-				folderId: task.folder_id,
-				notes: task.notes,
-				tags: task.tags,
-			}));
+		const setAllTasks = async () => {
+			try {
+				const allTasks = await getAllTasks(currFolderId);
 	
-			// Update the state with fetched tasks
-			setTaskItems(taskItems);
+				// Map response data to the required format
+				const taskItems = allTasks.map((task) => ({
+					taskId: task.task_id,
+					name: task.name,
+					dueDate: task.due_date ? (new Date(task.due_date)).toLocaleDateString("en-US") : null,
+					priority: task.priority,
+					folderId: task.folder_id,
+					notes: task.notes,
+					tags: task.tags,
+				}));
+		
+				// Update the state with fetched tasks
+				setTaskItems(taskItems);
+			} catch (error) {
+				console.error("Error setting all tasks", error);
+			}
 		}
-        getAllTasksFromApi();
+        setAllTasks();
     }, [currFolderId, newTask, editTaskId, taskDeleted]);
 
 	// Add the new task to the task list when `newTask` changes

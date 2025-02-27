@@ -14,15 +14,19 @@ export default ({ taskId, editTaskId }) => {
         if (!paused) return; // Update elapsed time only when paused
 
         const initializeTime = async () => {
-            const active = await getIsActive(taskId);
-            setIsActive(active);
-            if (active) setActiveTaskId(taskId);
-
-            const activeDurationText = await getActiveDurationText(taskId);
-            setActiveTime(activeDurationText);
-
-            const restedDurationText = await getRestedDurationText(taskId);
-            setRestedTime(restedDurationText);
+            try {
+                const active = await getIsActive(taskId);
+                setIsActive(active);
+                if (active) setActiveTaskId(taskId);
+    
+                const activeDurationText = await getActiveDurationText(taskId);
+                setActiveTime(activeDurationText);
+    
+                const restedDurationText = await getRestedDurationText(taskId);
+                setRestedTime(restedDurationText);
+            } catch (error) {
+                console.error("Error initializing time", error);
+            }
         };
         initializeTime();
     }, [paused]);

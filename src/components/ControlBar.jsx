@@ -26,18 +26,23 @@ const ControlBar = ({ setShowFolder, setSearchItems, searching, setSearching, cu
             return;
         }
 
-        const searchedTasks = await getSearchRes(inputRef?.current.value); // Call the search API
-        const taskItems = searchedTasks.map((task) => ({
-            taskId: task.task_id,
-            name: task.name,
-            dueDate: task.due_date ? task.due_date.split("T")[0].replaceAll("-", "/") : null,
-            priority: task.priority,
-            folderId: task.folder_id,
-            notes: task.notes,
-            activeSeconds: task.active_seconds,
-            tags: task.tags,
-        }));
-        setSearchItems(taskItems); // Update search results in state
+        try {
+            const searchedTasks = await getSearchRes(inputRef?.current.value); // Call the search API
+            const taskItems = searchedTasks.map((task) => ({
+                taskId: task.task_id,
+                name: task.name,
+                dueDate: task.due_date ? task.due_date.split("T")[0].replaceAll("-", "/") : null,
+                priority: task.priority,
+                folderId: task.folder_id,
+                notes: task.notes,
+                activeSeconds: task.active_seconds,
+                tags: task.tags,
+            }));
+            setSearchItems(taskItems); // Update search results in state
+        } catch (error) {
+            console.error("Error setting searched tasks", error);
+        }
+
     };
 
     // Handle input focus (set searching state to true)

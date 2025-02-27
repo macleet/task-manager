@@ -21,11 +21,15 @@ export default ({ name, taskId, currentTab }) => {
     useEffect(() => {
         if (isLoading) return; // Skip fetching if already loading
 
-        const getPhasesFromApi = async () => {
-            const { phases } = await getPhases(taskId);
-            setPhases(phases); // Update phases state with fetched data
+        const retrievePhases = async () => {
+            try {
+                const { phases } = await getPhases(taskId);
+                setPhases(phases); // Update phases state with fetched data
+            } catch (error) {
+                console.error("Error retrieving phases", error);
+            }
         };
-        getPhasesFromApi();
+        retrievePhases();
     }, [isLoading]); // Fetch phases when `isLoading` changes
 
     const generateSubtasks = async () => {

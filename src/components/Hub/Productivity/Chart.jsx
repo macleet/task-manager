@@ -18,22 +18,26 @@ export default ({ taskId }) => {
         datasets: []
     });
 
-    const getGraphDataFromApi = async () => {
-        const { activeData, restData } = await getGraphData(taskId, weekPeriod.getPeriodDatesArray());
-        setChartData(prev => ({
-            ...prev,
-            datasets: [
-                {...restedDataset, data: restData}, 
-                {...workedDataset, data: activeData}
-            ]
-        }));
-        chartRef.current?.update();
+    const updateGraph = async () => {
+        try {
+            const { activeData, restData } = await getGraphData(taskId, weekPeriod.getPeriodDatesArray());
+            setChartData(prev => ({
+                ...prev,
+                datasets: [
+                    {...restedDataset, data: restData}, 
+                    {...workedDataset, data: activeData}
+                ]
+            }));
+            chartRef.current?.update();
+        } catch (error) {
+            console.error("Error updating graph", error);
+        }
     };
 
-    useEffect(() => { getGraphDataFromApi() }, []);
+    useEffect(() => { updateGraph() }, []);
     useEffect(() => {
         if (!paused) return;
-        getGraphDataFromApi();
+        updateGraph();
     }, [weekPeriod, paused]);
 
     return(

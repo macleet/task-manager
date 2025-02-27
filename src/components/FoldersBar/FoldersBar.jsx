@@ -13,11 +13,15 @@ const FoldersBar = ({ setCurrHeader, currFolderId, setCurrFolderId, showFolder, 
 
     // Fetch folder items from the server
     useEffect(() => {
-        const getFoldersFromApi = async () => {
-            const folders = await getAllFolders();
-            setFolderItems(folders);
+        const getFolders = async () => {
+            try {
+                const folders = await getAllFolders();
+                setFolderItems(folders);
+            } catch (error) {
+                console.error("Error setting current folder items", error);
+            }
         };
-        getFoldersFromApi();
+        getFolders();
     }, [modified]);
 
     // Handle adding new folder
@@ -36,8 +40,13 @@ const FoldersBar = ({ setCurrHeader, currFolderId, setCurrFolderId, showFolder, 
             setAddFolder(false);
             return;
         }
-        const folderId = await addNewFolder(inputRef.current.value);
-        setCurrFolderId(folderId);
+
+        try {
+            const folderId = await addNewFolder(inputRef.current.value);
+            setCurrFolderId(folderId);
+        } catch (error) {
+            console.error("Error setting current folder", error);
+        }
         setCurrHeader(inputRef.current.value);
         setModified(!modified);
         setAddFolder(false);

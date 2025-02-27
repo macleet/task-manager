@@ -25,14 +25,33 @@ export default ({}) => {
         seconds: 0
     });
 
+    const updateMinutes = async () => {
+        const elapsedMinutes = Math.round(((pausedTime.minutes - timerTime.minutes) * 60 - (pausedTime.seconds - timerTime.seconds)) / 60);
+        try {
+            if (currentSession.type === "work") await setElapsedMinutes(activeTaskId, elapsedMinutes);
+            else await setRestedMinutes(activeTaskId, elapsedMinutes);
+            setPaused(!paused);
+            setPausedTime({
+                minutes: timerTime.minutes,
+                seconds: timerTime.seconds
+            });
+        } catch (error) {
+            console.error("Error updating minutes", error)
+        }
+    };
+
     useEffect(() => {
-        const getActiveTaskFromApi = async () => {
-            if (activeTaskId > 0) {
-                const { taskName, folderName } = await getActiveTask(activeTaskId);
-                setActiveTask({ taskName, folderName });
+        const setActiveTaskDetails = async () => {
+            try {
+                if (activeTaskId > 0) {
+                    const { taskName, folderName } = await getActiveTask(activeTaskId);
+                    setActiveTask({ taskName, folderName });
+                }
+            } catch {
+                console.error("Error setting active task details for timer", error);
             }
         }
-        getActiveTaskFromApi();
+        setActiveTaskDetails();
 
         const sessionQueue = new SessionCircularList();
         const workSession = new SessionNode("work", 30);
@@ -58,7 +77,8 @@ export default ({}) => {
     useEffect(() => {
         if (paused) return;
         if (timerTime.minutes === 0 && timerTime.seconds === 0) {
-            setPaused(true);
+            updateMinutes();
+            handleNext();
             return;
         }
         if (timerTime.seconds === -1 && timerTime.minutes > 0) {
@@ -78,19 +98,7 @@ export default ({}) => {
             setPaused(!paused);
             return;
         }
-
-        const elapsedMinutes = Math.round(((pausedTime.minutes - timerTime.minutes) * 60 - (pausedTime.seconds - timerTime.seconds)) / 60);
-        try {
-            if (currentSession.type === "work") await setElapsedMinutes(activeTaskId, elapsedMinutes);
-            else await setRestedMinutes(activeTaskId, elapsedMinutes);
-            setPaused(!paused);
-            setPausedTime({
-                minutes: timerTime.minutes,
-                seconds: timerTime.seconds
-            });
-        } catch (error) {
-            console.error("Error patching active or rest time", error);
-        }
+        updateMinutes();
     };
 
     const handleNext = () => {
