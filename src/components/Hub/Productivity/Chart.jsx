@@ -22,15 +22,18 @@ export default ({ taskId }) => {
         const { activeData, restData } = await getGraphData(taskId, weekPeriod.getPeriodDatesArray());
         setChartData(prev => ({
             ...prev,
-            datasets: [{...restedDataset, data: restData}, {...workedDataset, data: activeData}]
+            datasets: [
+                {...restedDataset, data: restData}, 
+                {...workedDataset, data: activeData}
+            ]
         }));
+        chartRef.current?.update();
     };
 
     useEffect(() => { getGraphDataFromApi() }, []);
     useEffect(() => {
         if (!paused) return;
         getGraphDataFromApi();
-        chartRef.current?.update();
     }, [weekPeriod, paused]);
 
     return(
