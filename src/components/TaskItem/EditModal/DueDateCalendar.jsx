@@ -2,6 +2,7 @@ import Calendar from "react-calendar";
 
 export default ({ edit, dueDate, setTaskDetails }) => {
     const handleDayClick = async newDate => {
+        console.log(new Date(dueDate).toDateString());
         if (!edit) return;
         setTaskDetails(prev => ({...prev, dueDate: newDate}));
     };
@@ -15,6 +16,7 @@ export default ({ edit, dueDate, setTaskDetails }) => {
                     prevLabel={edit ? undefined : null}
                     nextLabel={edit ? undefined : null}
                     next2Label={edit ? undefined : null}
+                    minDetail={edit ? "year" : "month"}
                     onClickDay={handleDayClick}
                     value={dueDate}
                     calendarType="gregory"
