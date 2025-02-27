@@ -49,8 +49,6 @@ export default ({}) => {
             minutes: sessionQueue.head.duration,
             seconds: 0
         });
-        // setMinutes(sessionQueue.head.duration);
-        // setSeconds(0);
         setPausedTime({
             minutes: sessionQueue.head.duration,
             seconds: 0
@@ -76,17 +74,23 @@ export default ({}) => {
     }, [timerTime.seconds, paused]);
 
     const handleTogglePause = async () => {
-        setPaused(!paused);
-
-        if (paused || activeTaskId < 0) return;
+        if (activeTaskId < 0) {
+            setPaused(!paused);
+            return;
+        }
 
         const elapsedMinutes = Math.round(((pausedTime.minutes - timerTime.minutes) * 60 - (pausedTime.seconds - timerTime.seconds)) / 60);
-        setPausedTime({
-            minutes: timerTime.minutes,
-            seconds: timerTime.seconds
-        });
-        if (currentSession.type === "work") await setElapsedMinutes(activeTaskId, elapsedMinutes);
-        else await setRestedMinutes(activeTaskId, elapsedMinutes);
+        try {
+            if (currentSession.type === "work") await setElapsedMinutes(activeTaskId, elapsedMinutes);
+            else await setRestedMinutes(activeTaskId, elapsedMinutes);
+            setPaused(!paused);
+            setPausedTime({
+                minutes: timerTime.minutes,
+                seconds: timerTime.seconds
+            });
+        } catch (error) {
+            console.error("Error patching active or rest time", error);
+        }
     };
 
     const handleNext = () => {
