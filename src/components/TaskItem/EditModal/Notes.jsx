@@ -1,12 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default ({edit, notes, setTaskDetails}) => {
     const [taskNotes, setTaskNotes] = useState(notes);
 
     const changeNotes = (event) => {
-        setTaskNotes(event.target.value);
-        if (!edit) return;
-        setTaskDetails(prev => ({...prev, name: event.target.value}));
+        if (event.target.value.length <= 500) setTaskNotes(event.target.value);
+        if (edit) setTaskDetails(prev => ({...prev, name: event.target.value}));
     };
 
     return(
@@ -20,6 +19,7 @@ export default ({edit, notes, setTaskDetails}) => {
                     className={`${!edit && "outline-none"} ${notes.length === 500 && "outline-1 outline-red-300"} w-full h-full rounded scroll-small p-2 leading-[20px] text-[13px] resize-none`} 
                 />
             </div>
+            <span className={`${taskNotes.length === 500 && "text-red-500"} self-end text-xs transition-colors ease-in-out`} >{taskNotes.length}/500</span>
         </div>
     );
 };
