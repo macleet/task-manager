@@ -11,6 +11,10 @@ export default ({ edit, dueDate, setTaskDetails }) => {
             <p className="flex items-center text-[13px] font-medium" >Due Date</p>
             <div className="flex justify-center self-center bg-blue-100 p-5 rounded-lg">
                 <Calendar 
+                    prev2Label={edit ? undefined : null}
+                    prevLabel={edit ? undefined : null}
+                    nextLabel={edit ? undefined : null}
+                    next2Label={edit ? undefined : null}
                     onClickDay={handleDayClick}
                     value={dueDate}
                     calendarType="gregory"
