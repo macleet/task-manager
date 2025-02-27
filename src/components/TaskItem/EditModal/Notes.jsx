@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default ({edit, notes, setTaskDetails}) => {
     const [taskNotes, setTaskNotes] = useState(notes);
 
     const changeNotes = (event) => {
         if (event.target.value.length <= 500) setTaskNotes(event.target.value);
-        if (edit) setTaskDetails(prev => ({...prev, name: event.target.value}));
+        if (edit) setTaskDetails(prev => ({...prev, notes: event.target.value}));
     };
 
     return(
