@@ -28,19 +28,13 @@ export default ({ taskId, editTaskId }) => {
     }, [paused]);
 
     useEffect(() => {
-        const getIsActiveFromApi = async () => {
-            const active = await getIsActive(taskId);
-            setIsActive(active);
-        };
-        getIsActiveFromApi();
+        setIsActive(taskId === activeTaskId);
     }, [activeTaskId]);
 
     const toggleActiveTask = async (event) => {
         const isChecked = event.target.checked;
-        await patchIsActive(taskId, isChecked);
-
-        setIsActive(prev => !prev);
         setActiveTaskId(isChecked ? taskId : -1);
+        await patchIsActive(taskId, isChecked);
     };
 
     return (
