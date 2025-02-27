@@ -172,7 +172,7 @@ export const patchDueDate = async (taskId, dueDate) => {
     }
 };
 
-export const patchNotes = async (taskId) => {
+export const patchNotes = async (taskId, notes) => {
     try {
         await axios.patch(`${baseUrl}/task/notesChange`, {	
             taskId,

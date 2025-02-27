@@ -22,7 +22,7 @@ export default ({taskId, name, dueDate, priority, notes, activeSeconds, tags, ed
         await patchName(taskId, taskDetails.name);
         await patchDueDate(taskId, taskDetails.dueDate);
         await patchPriority(taskId, taskDetails.priority);
-        // await patchNotes(taskId, taskDetails.notes);
+        await patchNotes(taskId, taskDetails.notes);
         setEdit(false);
         setEditTaskId(-1);
     };
